@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portal interativo comparando a Era das Grandes Telas (Cinema/TV e Cultura de Massa) com a Era das Pequenas Telas (Smartphones, Algoritmos, Política e Antipolítica). Projeto interdisciplinar SESI / BNCC EM13CHS603.">
+  <title>Da Sala de Cinema ao Bolso | O Impacto das Telas na Sociedade</title>
+
+  <!-- Google Fonts: Tipografias contrastantes para as duas eras midiáticas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuração de Design Tokens personalizados no Tailwind -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cinema: {
+              gold: '#d4af37',
+              red: '#7a1c1c',
+              cream: '#f4ecd8',
+              dark: '#1c1613',
+              sepia: '#2c221e'
+            },
+            cyber: {
+              bg: '#090a0f',
+              surface: '#111422',
+              cyan: '#00f3ff',
+              magenta: '#ff007f',
+              purple: '#8a2be2'
+            }
+          },
+          fontFamily: {
+            serifCinema: ['"Playfair Display"', 'Georgia', 'serif'],
+            sansCyber: ['"Space Grotesk"', 'sans-serif'],
+            monoCyber: ['"JetBrains Mono"', 'monospace'],
+            body: ['"Inter"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Estilos Customizados: Efeitos Cinematográficos, Glow Cyberpunk, Película de Filme e Animações -->
+  <style>
+    :root {
+      --split-pos: 50%;
+      --dopamine-glow: 0px;
+    }
+
+    body {
+      background-color: #090a0f;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Textura sutil de película cinematográfica */
+    .film-grain {
+      background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+
+    /* Perfurações de rolo de filme 35mm */
+    .film-strip-top,
+    .film-strip-bottom {
+      height: 14px;
+      background-color: #1c1613;
+      background-image: repeating-linear-gradient(
+        to right,
+        transparent 0px,
+        transparent 10px,
+        #f4ecd8 10px,
+        #f4ecd8 22px,
+        transparent 22px,
+        transparent 32px
+      );
+      opacity: 0.85;
+    }
+
+    /* Grid digital sutil para o lado Cyberpunk */
+    .cyber-grid {
+      background-size: 36px 36px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 243, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(138, 43, 226, 0.06) 1px, transparent 1px);
+    }
+
+    /* Brilhos Neon */
+    .neon-cyan-glow {
+      box-shadow: 0 0 18px rgba(0, 243, 255, 0.25), inset 0 0 10px rgba(0, 243, 255, 0.1);
+    }
+    .neon-magenta-glow {
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.3), inset 0 0 10px rgba(255, 0, 127, 0.1);
+    }
+    .gold-cinema-glow {
+      box-shadow: 0 10px 30px rgba(28, 22, 19, 0.5), 0 0 15px rgba(212, 175, 55, 0.25);
+    }
+
+    /* Split Screen no Desktop usando clip-path controlado via variável CSS */
+    @media (min-width: 768px) {
+      .hero-cinema-layer {
+        clip-path: inset(0 calc(100% - var(--split-pos)) 0 0);
+        transition: clip-path 0.08s ease-out;
+      }
+      .hero-divider-line {
+        left: var(--split-pos);
+        transition: left 0.08s ease-out;
+      }
+    }
+
+    /* Animação de pulso intenso quando a dopamina está alta */
+    @keyframes dopamineOverload {
+      0%, 100% {
+        box-shadow: 0 0 25px rgba(255, 0, 127, 0.6), 0 0 50px rgba(0, 243, 255, 0.4);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(255, 0, 127, 0.95), 0 0 70px rgba(138, 43, 226, 0.7);
+        transform: scale(1.005);
+      }
+    }
+
+    .overload-active {
+      animation: dopamineOverload 0.8s infinite ease-in-out;
+      border-color: #ff007f !important;
+    }
+
+    @keyframes floatUpFade {
+      0% { opacity: 0; transform: translateY(12px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .animate-pop-in {
+      animation: floatUpFade 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Customização do input range do Hero */
+    input[type="range"].split-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: ew-resize;
+    }
+    input[type="range"].split-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #d4af37 50%, #00f3ff 50%);
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      cursor: ew-resize;
+    }
+    input[type="range"].split-slider::-moz-range-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #d4af37 50%, #00f3ff 50%);
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      cursor: ew-resize;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-cyber-magenta selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- 1. CABEÇALHO E NAVEGAÇÃO PRINCIPAL (SEMÂNTICA + ACESSIBILIDADE)       -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-cyber-bg/90 backdrop-blur-md border-b border-white/10">
+    <nav aria-label="Navegação principal do portal" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Identidade do Projeto -->
+      <a href="#topo" class="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-cyber-cyan rounded-lg p-1">
+        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-cinema-gold via-cinema-red to-cyber-magenta text-white font-bold shadow-md">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+          </svg>
+        </span>
+        <div class="leading-tight">
+          <span class="block text-xs font-monoCyber uppercase tracking-widest text-cinema-gold">SESI • EM13CHS603</span>
+          <span class="block text-sm sm:text-base font-bold text-white group-hover:text-cyber-cyan transition-colors">Cinema ao Bolso</span>
+        </div>
+      </a>
+
+      <!-- Links de Navegação Desktop -->
+      <ul class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-300">
+        <li><a href="#jornada" class="hover:text-cinema-gold transition-colors py-2">Jornada Comparativa</a></li>
+        <li><a href="#politica" class="hover:text-cyber-magenta transition-colors py-2">Política & Antipolítica</a></li>
+        <li><a href="#laboratorio" class="hover:text-cyber-cyan transition-colors py-2">Lab. Dopamina</a></li>
+        <li><a href="#dados" class="hover:text-cinema-gold transition-colors py-2">Dados Históricos</a></li>
+        <li><a href="#diagnostico" class="hover:text-cyber-cyan transition-colors py-2">Seu Diagnóstico</a></li>
+      </ul>
+
+      <!-- Botão Modo Apresentação (Defesa Técnica e Pedagógica em Sala) -->
+      <div class="flex items-center gap-2">
+        <button
+          id="open-presentation-btn"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="presentation-modal"
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-gradient-to-r from-cinema-gold/20 to-cyber-cyan/20 border border-cyber-cyan/50 text-white hover:border-cyber-cyan hover:shadow-[0_0_15px_rgba(0,243,255,0.35)] transition-all focus:outline-none focus:ring-2 focus:ring-cyber-cyan"
+        >
+          <svg class="w-4 h-4 text-cyber-cyan shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <span>Modo Apresentação</span>
+        </button>
+
+        <!-- Botão Menu Mobile -->
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          aria-label="Abrir menu de navegação"
+          class="lg:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:bg-white/10"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Menu Mobile Expansível -->
+    <div id="mobile-nav" class="hidden lg:hidden bg-cyber-surface border-b border-white/10 px-4 pt-2 pb-4 space-y-1">
+      <a href="#jornada" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-200 hover:bg-white/5">1. Jornada Comparativa</a>
+      <a href="#politica" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-200 hover:bg-white/5">2. Política & Antipolítica</a>
+      <a href="#laboratorio" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-200 hover:bg-white/5">3. Laboratório de Dopamina</a>
+      <a href="#dados" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-200 hover:bg-white/5">4. Evolução Histórica (Gráficos)</a>
+      <a href="#diagnostico" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-200 hover:bg-white/5">5. Diagnóstico de Hábitos</a>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- CONTEÚDO PRINCIPAL                                                    -->
+  <!-- ===================================================================== -->
+  <main id="topo">
+
+    <!-- =================================================================== -->
+    <!-- SEÇÃO 1: HERO SPLIT-SCREEN INTERATIVO (DUAS ERAS MIDIÁTICAS)        -->
+    <!-- =================================================================== -->
+    <section aria-labelledby="hero-heading" class="relative border-b border-white/15 overflow-hidden">
+      <h1 id="hero-heading" class="sr-only">Da Sala de Cinema ao Bolso: O Impacto das Telas na Sociedade (Da Cultura de Massa ao Algoritmo)</h1>
+
+      <!-- Barra Superior de Controle do Split-Screen -->
+      <div class="bg-black/80 backdrop-blur-md border-b border-white/10 py-3 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-2 text-xs font-monoCyber text-slate-300">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-cinema-gold"></span>
+            <span>1920–2000: Cultura de Massa</span>
+            <span class="text-slate-600">|</span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-cyber-cyan"></span>
+            <span>2007–Hoje: Era Algorítmica</span>
+          </div>
+
+          <!-- Botões de Foco Rápido -->
+          <div class="flex flex-wrap items-center justify-center gap-2" role="group" aria-label="Controles de visualização comparativa do banner">
+            <button type="button" data-split="85" class="hero-focus-btn px-3 py-1.5 rounded-lg text-xs font-serifCinema font-bold bg-cinema-cream text-cinema-dark border border-cinema-gold hover:bg-cinema-gold transition-colors">
+              Focar Cinema & TV
+            </button>
+            <button type="button" data-split="50" class="hero-focus-btn px-3 py-1.5 rounded-lg text-xs font-monoCyber font-semibold bg-white/10 text-white border border-white/25 hover:bg-white/20 transition-colors">
+              50% / 50%
+            </button>
+            <button type="button" data-split="15" class="hero-focus-btn px-3 py-1.5 rounded-lg text-xs font-monoCyber font-bold bg-cyber-surface text-cyber-cyan border border-cyber-cyan/60 hover:bg-cyber-cyan hover:text-cyber-bg transition-colors">
+              Focar Smartphone & Algoritmo
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container Split-Screen (Desktop sobreposto com clip-path | Mobile empilhado responsivo) -->
+      <div id="hero-split-container" class="relative min-h-[580px] md:min-h-[640px] flex flex-col md:block">
+
+        <!-- CAMADA BASE (DIREITA / FUNDO): ERA DAS PEQUENAS TELAS (CYBERPUNK) -->
+        <div class="w-full md:absolute md:inset-0 bg-cyber-bg cyber-grid flex items-center px-6 py-12 sm:px-12 lg:px-16">
+          <div class="max-w-7xl w-full mx-auto flex justify-end">
+            <div class="w-full md:w-[46%] flex items-center justify-between gap-5 relative z-10">
+              <!-- Decoração Visual Smartphone Flutuante (Alinhada sem sobrepor texto) -->
+              <div aria-hidden="true" class="hidden xl:flex shrink-0 w-36 h-60 rounded-[1.75rem] border-2 border-cyber-cyan/40 bg-cyber-surface/80 backdrop-blur-sm p-2.5 flex-col justify-between shadow-[0_0_30px_rgba(0,243,255,0.15)] pointer-events-none">
+                <div class="w-10 h-1 bg-white/20 rounded-full mx-auto"></div>
+                <div class="space-y-2">
+                  <div class="h-12 rounded-lg bg-gradient-to-r from-cyber-magenta/30 to-cyber-purple/30 border border-cyber-magenta/40 p-1.5">
+                    <div class="w-8 h-1.5 bg-cyber-magenta rounded mb-1"></div>
+                    <div class="w-full h-1.5 bg-white/20 rounded"></div>
+                  </div>
+                  <div class="h-14 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/30 p-1.5">
+                    <div class="w-10 h-1.5 bg-cyber-cyan rounded mb-1"></div>
+                    <div class="w-4/5 h-1.5 bg-white/20 rounded mb-1"></div>
+                    <div class="w-3/5 h-1.5 bg-white/10 rounded"></div>
+                  </div>
+                </div>
+                <div class="flex justify-around text-[8px] font-monoCyber text-cyber-cyan/70">
+                  <span>FEED</span><span>LIVE</span><span>FOR YOU</span>
+                </div>
+              </div>
+
+              <div class="text-left md:text-right space-y-5 flex-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-magenta/15 border border-cyber-magenta/50 text-cyber-magenta font-monoCyber text-xs uppercase tracking-wider">
+                  <span class="w-2 h-2 rounded-full bg-cyber-magenta animate-ping"></span>
+                  2007 – Hoje • Era das Pequenas Telas
+                </div>
+
+                <h2 class="font-sansCyber text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                  Do Bolso ao <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-magenta">Algoritmo</span>
+                </h2>
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                  Telas individuais de 6 polegadas fragmentam o espaço público em <strong class="text-cyber-cyan">bolhas hiperpersonalizadas</strong>. A atenção vira mercadoria, o scroll é infinito e a política cede espaço à indignação viral e à antipolítica.
+                </p>
+
+                <!-- Tags Técnicas/Sociológicas Cyberpunk -->
+                <div class="flex flex-wrap md:justify-end gap-2 pt-1 font-monoCyber text-xs">
+                  <span class="px-2.5 py-1 rounded-md bg-cyber-surface border border-cyber-cyan/40 text-cyber-cyan">#SubjetividadeFragmentada</span>
+                  <span class="px-2.5 py-1 rounded-md bg-cyber-surface border border-cyber-magenta/40 text-cyber-magenta">#BolhasDeFiltro</span>
+                  <span class="px-2.5 py-1 rounded-md bg-cyber-surface border border-cyber-purple/40 text-purple-300">#EconomiaDaAtenção</span>
+                </div>
+
+                <div class="pt-3 flex flex-wrap md:justify-end gap-3">
+                  <a href="#laboratorio" class="px-5 py-3 rounded-xl font-monoCyber text-xs sm:text-sm font-bold bg-cyber-cyan text-cyber-bg hover:bg-white transition-all shadow-[0_0_20px_rgba(0,243,255,0.4)]">
+                    Testar Gatilhos de Dopamina →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAMADA SOBREPOSTA (ESQUERDA): ERA DAS GRANDES TELAS (CINEMA E TV) -->
+        <div class="hero-cinema-layer w-full md:absolute md:inset-0 bg-cinema-cream text-cinema-dark film-grain flex flex-col justify-between border-t-4 md:border-t-0 border-cinema-gold">
+          <!-- Perfuração de Rolo de Filme Superior -->
+          <div class="film-strip-top w-full" aria-hidden="true"></div>
+
+          <div class="max-w-7xl w-full mx-auto px-6 py-10 sm:px-12 lg:px-16 my-auto">
+            <div class="w-full md:w-[46%] flex items-center justify-between gap-5 relative z-10">
+              <div class="space-y-5 flex-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cinema-red text-cinema-cream font-serifCinema text-xs uppercase tracking-widest shadow">
+                  <span>1920 – 2000 • Era das Grandes Telas</span>
+                </div>
+
+                <h2 class="font-serifCinema text-3xl sm:text-4xl lg:text-5xl font-extrabold text-cinema-dark leading-tight">
+                  Da Sala de Cinema à <span class="text-cinema-red underline decoration-cinema-gold decoration-4 underline-offset-4">Cultura de Massa</span>
+                </h2>
+
+                <p class="text-cinema-sepia text-sm sm:text-base leading-relaxed font-medium">
+                  As salas de projeção e a televisão na sala de estar reuniam famílias e multidões em torno de <strong class="text-cinema-red">narrativas coletivas unificadas</strong>. Um espaço público centralizado, de ritmo linear e experiência compartilhada.
+                </p>
+
+                <!-- Tags Históricas Cinema/TV -->
+                <div class="flex flex-wrap gap-2 pt-1 font-serifCinema text-xs font-semibold">
+                  <span class="px-3 py-1 rounded-md bg-cinema-dark text-cinema-gold border border-cinema-gold/50">Espaço Público Coletivo</span>
+                  <span class="px-3 py-1 rounded-md bg-cinema-red/10 text-cinema-red border border-cinema-red/30">Indústria Cultural</span>
+                  <span class="px-3 py-1 rounded-md bg-cinema-dark/10 text-cinema-dark border border-cinema-dark/20">Grade Linear</span>
+                </div>
+
+                <div class="pt-3">
+                  <a href="#jornada" class="inline-block px-5 py-3 rounded-xl font-serifCinema text-xs sm:text-sm font-bold bg-cinema-red text-cinema-cream hover:bg-cinema-dark transition-colors shadow-lg">
+                    Explorar Jornada Histórica ↓
+                  </a>
+                </div>
+              </div>
+
+              <!-- Decoração Projetor / Tela Panorâmica (Alinhada sem sobrepor texto) -->
+              <div aria-hidden="true" class="hidden xl:flex shrink-0 w-44 h-32 rounded-xl border-4 border-cinema-dark bg-cinema-sepia p-2.5 flex-col justify-between shadow-xl pointer-events-none">
+                <div class="flex items-center justify-between text-[9px] font-monoCyber text-cinema-gold">
+                  <span>● REC 35MM</span>
+                  <span>24 FPS</span>
+                </div>
+                <div class="border border-cinema-gold/40 rounded h-16 flex items-center justify-center bg-cinema-dark/80 px-2 text-center">
+                  <span class="font-serifCinema italic text-cinema-gold text-xs tracking-widest">SESSÃO DAS OITO</span>
+                </div>
+                <div class="h-1 bg-cinema-gold/40 rounded-full w-3/4 mx-auto"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Perfuração de Rolo de Filme Inferior -->
+          <div class="film-strip-bottom w-full" aria-hidden="true"></div>
+        </div>
+
+        <!-- LINHA DIVISÓRIA INTERATIVA (APENAS DESKTOP) -->
+        <div aria-hidden="true" class="hero-divider-line hidden md:block absolute top-0 bottom-0 w-1 bg-gradient-to-b from-cinema-gold via-white to-cyber-cyan shadow-[0_0_20px_rgba(255,255,255,0.9)] z-20 pointer-events-none">
+          <div class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-cyber-bg border-2 border-white flex items-center justify-center text-white shadow-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l-3 3 3 3m8-6l3 3-3 3" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- INPUT RANGE INVISÍVEL PARA ARRASTAR O SPLIT NO DESKTOP -->
+        <label for="hero-split-range" class="sr-only">Ajustar proporção visual entre Era das Grandes Telas e Era das Pequenas Telas</label>
+        <input
+          id="hero-split-range"
+          type="range"
+          min="10"
+          max="90"
+          value="50"
+          class="split-slider hidden md:block absolute inset-0 w-full h-full z-30 opacity-0"
+        >
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SEÇÃO 2: JORNADA COMPARATIVA (CULTURA DE MASSA VS ALGORITMO)        -->
+    <!-- =================================================================== -->
+    <section id="jornada" aria-labelledby="jornada-heading" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+        <span class="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/15 font-monoCyber text-xs text-cinema-gold uppercase tracking-widest">
+          Análise Sociocultural • BNCC EM13CHS603
+        </span>
+        <h2 id="jornada-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+          Jornada Comparativa: <span class="font-serifCinema text-cinema-gold">Coletivo</span> vs. <span class="font-sansCyber text-cyber-cyan">Algorítmico</span>
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Selecione um eixo temático abaixo para investigar como a transição das grandes telas para os dispositivos móveis transformou o espaço público, a noção de tempo, a política e a estética contemporânea.
+        </p>
+      </div>
+
+      <!-- Abas Interativas de Eixos Temáticos -->
+      <div role="tablist" aria-label="Eixos de comparação histórica entre as telas" class="flex flex-wrap justify-center gap-2.5 mb-10">
+        <button role="tab" aria-selected="true" data-axis="espaco" class="axis-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-gradient-to-r from-cinema-gold to-cyber-cyan text-cyber-bg shadow-lg">
+          1. Espaço Público & Sociabilidade
+        </button>
+        <button role="tab" aria-selected="false" data-axis="tempo" class="axis-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyber-surface text-slate-300 border border-white/10 hover:border-white/30">
+          2. Percepção de Tempo & Atenção
+        </button>
+        <button role="tab" aria-selected="false" data-axis="politica" class="axis-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyber-surface text-slate-300 border border-white/10 hover:border-white/30">
+          3. Política, Bolhas & Antipolítica
+        </button>
+        <button role="tab" aria-selected="false" data-axis="estetica" class="axis-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyber-surface text-slate-300 border border-white/10 hover:border-white/30">
+          4. Estética & Subculturas
+        </button>
+      </div>
+
+      <!-- Painel Dinâmico de Comparação Lado a Lado -->
+      <div id="comparison-panel" role="tabpanel" aria-live="polite" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+        <!-- Card Esquerdo: Era das Grandes Telas (Estética Cinema/Retrô) -->
+        <article class="rounded-2xl bg-cinema-cream text-cinema-dark border-2 border-cinema-gold gold-cinema-glow overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="film-strip-top w-full" aria-hidden="true"></div>
+            <div class="p-6 sm:p-8 space-y-4">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-3 py-1 rounded-md bg-cinema-red text-cinema-cream font-serifCinema text-xs font-bold uppercase tracking-wider">
+                  Grandes Telas (Cinema & TV)
+                </span>
+                <span id="comp-cinema-era" class="font-monoCyber text-xs text-cinema-sepia font-bold">SÉCULO XX</span>
+              </div>
+
+              <h3 id="comp-cinema-title" class="font-serifCinema text-2xl sm:text-3xl font-extrabold text-cinema-dark">
+                A Praça Pública Eletrônica e a Experiência Coletiva
+              </h3>
+
+              <p id="comp-cinema-desc" class="text-cinema-sepia text-sm sm:text-base leading-relaxed">
+                Ir ao cinema ou reunir a família na sala de estar para assistir ao telejornal ou à novela criava um ritual compartilhado. Mesmo sob a lógica da Indústria Cultural (Adorno & Horkheimer), havia um repertório comum: milhões de pessoas viam a mesma obra ao mesmo tempo e debatiam no dia seguinte na escola, no trabalho ou na rua.
+              </p>
+
+              <ul id="comp-cinema-bullets" class="space-y-2.5 pt-2 text-sm text-cinema-dark font-medium">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-cinema-red font-bold">✦</span>
+                  <span><strong>Recepção Coletiva:</strong> Emoções vividas em grupo na sala escura ou no sofá.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-cinema-red font-bold">✦</span>
+                  <span><strong>Referência Comum:</strong> Construção de imaginários nacionais e memória social partilhada.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-cinema-red font-bold">✦</span>
+                  <span><strong>Mediação Editorial:</strong> Curadoria centralizada por emissoras, estúdios e críticos.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-cinema-dark/10 px-6 py-4 border-t border-cinema-dark/15 flex items-center justify-between text-xs font-serifCinema font-bold text-cinema-red">
+            <span>Conceito-chave:</span>
+            <span id="comp-cinema-concept" class="uppercase tracking-wider">Cultura de Massa & Esfera Pública</span>
+          </div>
+        </article>
+
+        <!-- Card Direito: Era das Pequenas Telas (Estética Cyberpunk/Algorítmica) -->
+        <article class="rounded-2xl bg-cyber-surface text-slate-100 border-2 border-cyber-cyan/60 neon-cyan-glow overflow-hidden flex flex-col justify-between relative">
+          <div class="p-6 sm:p-8 space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-3 py-1 rounded-md bg-cyber-cyan/15 border border-cyber-cyan text-cyber-cyan font-monoCyber text-xs font-bold uppercase tracking-wider">
+                Pequenas Telas (Smartphones & Redes)
+              </span>
+              <span id="comp-cyber-era" class="font-monoCyber text-xs text-cyber-magenta font-bold">SÉCULO XXI</span>
+            </div>
+
+            <h3 id="comp-cyber-title" class="font-sansCyber text-2xl sm:text-3xl font-bold text-white">
+              Isolamento Conectado e Subjetividade Fragmentada
+            </h3>
+
+            <p id="comp-cyber-desc" class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Cada indivíduo carrega sua própria tela no bolso, personalizada em tempo real por sistemas de recomendação. Mesmo sentadas na mesma mesa, as pessoas habitam universos informativos completamente distintos, moldados por métricas de retenção e engajamento individual.
+            </p>
+
+            <ul id="comp-cyber-bullets" class="space-y-2.5 pt-2 text-sm text-slate-200">
+              <li class="flex items-start gap-2.5">
+                <span class="text-cyber-cyan font-monoCyber font-bold">&gt;</span>
+                <span><strong>Hiperpersonalização:</strong> Cada feed é único e invisível para o outro.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-cyber-magenta font-monoCyber font-bold">&gt;</span>
+                <span><strong>Erosão do Espaço Comum:</strong> Redução das experiências culturais simultâneas.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-cyber-purple font-monoCyber font-bold">&gt;</span>
+                <span><strong>Saúde Mental & FOMO:</strong> Comparação social constante e ansiedade de conexão.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-black/40 px-6 py-4 border-t border-white/10 flex items-center justify-between text-xs font-monoCyber text-cyber-cyan">
+            <span>Conceito-chave:</span>
+            <span id="comp-cyber-concept" class="uppercase tracking-wider">Sociedade em Rede & Bolhas</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Caixa de Síntese Crítica (Ciências Humanas) -->
+      <aside aria-label="Síntese crítica de Ciências Humanas" class="mt-8 rounded-2xl bg-gradient-to-r from-cinema-sepia/60 via-cyber-surface to-cyber-purple/20 border border-white/15 p-6 sm:p-7 flex flex-col md:flex-row items-start md:items-center gap-5">
+        <div class="w-12 h-12 rounded-xl bg-cinema-gold/20 border border-cinema-gold/50 flex items-center justify-center text-cinema-gold shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div class="space-y-1">
+          <h4 class="font-monoCyber text-xs uppercase tracking-widest text-cinema-gold">Síntese Crítica • Habilidade EM13CHS603</h4>
+          <p id="comp-synthesis-text" class="text-sm sm:text-base text-slate-200 leading-relaxed">
+            A passagem da tela coletiva para a tela individual não significou apenas uma mudança de tamanho de hardware, mas uma reorganização profunda da sociabilidade: saímos da massificação homogênea para a fragmentação solitária mediada por códigos opacos.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SEÇÃO ESPECIAL: POLÍTICA E ANTIPOLÍTICA NA ERA DAS TELAS            -->
+    <!-- =================================================================== -->
+    <section id="politica" aria-labelledby="politica-heading" class="py-16 sm:py-20 bg-gradient-to-b from-cyber-bg via-[#120d1d] to-cyber-bg border-y border-white/10 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto space-y-10">
+        <div class="max-w-3xl space-y-3">
+          <span class="inline-block px-3 py-1 rounded-full bg-cyber-magenta/15 border border-cyber-magenta/40 font-monoCyber text-xs text-cyber-magenta uppercase tracking-wider">
+            História & Sociologia • Política vs. Antipolítica
+          </span>
+          <h2 id="politica-heading" class="text-3xl sm:text-4xl font-bold text-white">
+            Como os Algoritmos Transformaram a <span class="text-cyber-magenta">Política</span> em <span class="text-cyber-cyan">Antipolítica</span>
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Na era das grandes telas, o debate político passava por instituições, partidos, imprensa profissional e debates televisivos com regras compartilhadas. Nas pequenas telas, a lógica comercial do engajamento premiou a indignação instantânea e a negação da própria política.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Card 1: Bolhas de Filtro -->
+          <article class="rounded-2xl bg-cyber-surface/90 border border-white/10 p-6 space-y-3 hover:border-cyber-cyan/50 transition-colors">
+            <div class="w-10 h-10 rounded-lg bg-cyber-cyan/15 text-cyber-cyan flex items-center justify-center font-monoCyber font-bold">01</div>
+            <h3 class="font-sansCyber text-xl font-bold text-white">Bolhas de Filtro & Câmaras de Eco</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              O algoritmo aprende rapidamente suas crenças e passa a ocultar o contraditório. O cidadão deixa de enxergar o pluralismo democrático e passa a acreditar que "todo mundo pensa igual a ele" — ou que quem discorda é um inimigo moral.
+            </p>
+          </article>
+
+          <!-- Card 2: A Ascensão da Antipolítica -->
+          <article class="rounded-2xl bg-cyber-surface/90 border border-cyber-magenta/40 p-6 space-y-3 neon-magenta-glow">
+            <div class="w-10 h-10 rounded-lg bg-cyber-magenta/20 text-cyber-magenta flex items-center justify-center font-monoCyber font-bold">02</div>
+            <h3 class="font-sansCyber text-xl font-bold text-white">O Fenômeno da Antipolítica</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              A <strong>antipolítica</strong> surge quando as redes sociais transformam a política em espetáculo de rejeição total às instituições, à ciência e ao diálogo. Lideranças performáticas vendem "soluções mágicas" em vídeos de 15 segundos, explorando o medo e o ressentimento.
+            </p>
+          </article>
+
+          <!-- Card 3: Desinformação e Emoção -->
+          <article class="rounded-2xl bg-cyber-surface/90 border border-white/10 p-6 space-y-3 hover:border-cinema-gold/50 transition-colors">
+            <div class="w-10 h-10 rounded-lg bg-cinema-gold/20 text-cinema-gold flex items-center justify-center font-monoCyber font-bold">03</div>
+            <h3 class="font-sansCyber text-xl font-bold text-white">Engajamento pela Raiva</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              Estudos mostram que conteúdos que despertam indignação moral e medo se espalham até 6 vezes mais rápido que notícias factuais. Sem letramento digital crítico, a cidadania ativa é substituída pelo clique impulsivo.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SEÇÃO 3: LABORATÓRIO DE DOPAMINA (SIMULADOR INTERATIVO)             -->
+    <!-- =================================================================== -->
+    <section id="laboratorio" aria-labelledby="lab-heading" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
+        <span class="inline-block px-3 py-1 rounded-full bg-cyber-cyan/15 border border-cyber-cyan/40 font-monoCyber text-xs text-cyber-cyan uppercase tracking-widest">
+          Experimento Interativo • Economia da Atenção
+        </span>
+        <h2 id="lab-heading" class="font-sansCyber text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+          Laboratório de <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-magenta">Dopamina</span>
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base">
+          Interaja com os botões abaixo para simular como os aplicativos de pequenas telas capturam sua atenção por meio de recompensas variáveis, notificações e hiperestímulos. Observe como a própria interface reage!
+        </p>
+      </div>
+
+      <!-- Painel Principal do Simulador -->
+      <div id="dopamine-lab-box" class="rounded-3xl bg-cyber-surface border-2 border-cyber-cyan/40 p-6 sm:p-8 lg:p-10 transition-all duration-300 shadow-2xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+          <!-- Coluna Esquerda (7 cols): Controles de Estímulo e Medidor -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Medidor de Captura de Atenção -->
+            <div class="p-5 rounded-2xl bg-black/50 border border-white/10 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="font-monoCyber text-xs uppercase tracking-wider text-slate-300">Nível de Dopamina / Captura de Atenção</span>
+                <div class="flex items-center gap-3">
+                  <span id="dopamine-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-monoCyber font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    ESTADO: CALMO
+                  </span>
+                  <span id="dopamine-percent" class="font-monoCyber text-2xl font-bold text-cyber-cyan">0%</span>
+                </div>
+              </div>
+
+              <!-- Barra de Progresso -->
+              <div class="w-full h-5 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/10" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="dopamine-progressbar">
+                <div id="dopamine-bar-fill" class="h-full rounded-full bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-magenta transition-all duration-300" style="width: 0%;"></div>
+              </div>
+
+              <!-- Métricas Acumuladas -->
+              <div class="grid grid-cols-3 gap-3 pt-2 text-center font-monoCyber">
+                <div class="p-2.5 rounded-xl bg-white/5">
+                  <span class="block text-[11px] text-slate-400">SCROLLS</span>
+                  <span id="metric-scrolls" class="text-lg font-bold text-white">0</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-white/5 relative">
+                  <span class="block text-[11px] text-slate-400">NOTIFICAÇÕES</span>
+                  <span id="metric-notifs" class="text-lg font-bold text-cyber-magenta">0</span>
+                  <span id="notif-red-dot" class="hidden absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-white/5">
+                  <span class="block text-[11px] text-slate-400">VALIDAÇÕES</span>
+                  <span id="metric-likes" class="text-lg font-bold text-cyber-cyan">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botões de Ação (Gatilhos Digitais) -->
+            <div class="space-y-3">
+              <p class="font-monoCyber text-xs uppercase tracking-wider text-slate-400">Disparar Gatilhos Algorítmicos:</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button type="button" id="btn-scroll-feed" class="p-4 rounded-xl bg-cyber-bg border border-cyber-cyan/50 hover:bg-cyber-cyan/15 text-left transition-all flex items-center justify-between group">
+                  <div>
+                    <span class="block font-sansCyber font-bold text-white group-hover:text-cyber-cyan">Rolar Feed Infinito</span>
+                    <span class="text-xs text-slate-400">Novidade contínua sem ponto final</span>
+                  </div>
+                  <span class="font-monoCyber text-xs px-2 py-1 rounded bg-cyber-cyan/20 text-cyber-cyan">+12%</span>
+                </button>
+
+                <button type="button" id="btn-trigger-notif" class="p-4 rounded-xl bg-cyber-bg border border-cyber-magenta/50 hover:bg-cyber-magenta/15 text-left transition-all flex items-center justify-between group">
+                  <div>
+                    <span class="block font-sansCyber font-bold text-white group-hover:text-cyber-magenta">Notificação Variável</span>
+                    <span class="text-xs text-slate-400">Alerta vermelho imprevisível</span>
+                  </div>
+                  <span class="font-monoCyber text-xs px-2 py-1 rounded bg-cyber-magenta/20 text-cyber-magenta">+18%</span>
+                </button>
+
+                <button type="button" id="btn-like-validate" class="p-4 rounded-xl bg-cyber-bg border border-cyber-purple/50 hover:bg-cyber-purple/15 text-left transition-all flex items-center justify-between group">
+                  <div>
+                    <span class="block font-sansCyber font-bold text-white group-hover:text-purple-300">Curtir / Validar</span>
+                    <span class="text-xs text-slate-400">Aprovação social instantânea</span>
+                  </div>
+                  <span class="font-monoCyber text-xs px-2 py-1 rounded bg-cyber-purple/20 text-purple-300">+10%</span>
+                </button>
+
+                <button type="button" id="btn-intense-algo" class="p-4 rounded-xl bg-gradient-to-r from-cyber-magenta/25 to-cyber-purple/25 border border-cyber-magenta hover:brightness-125 text-left transition-all flex items-center justify-between">
+                  <div>
+                    <span class="block font-sansCyber font-bold text-white">Ativar Algoritmo Intenso</span>
+                    <span class="text-xs text-pink-200">Modo bolha + indignação viral</span>
+                  </div>
+                  <span class="font-monoCyber text-xs px-2 py-1 rounded bg-red-500 text-white font-bold">+25%</span>
+                </button>
+              </div>
+
+              <!-- Botão Desintoxicar -->
+              <button type="button" id="btn-detox-reset" class="w-full py-3.5 px-4 rounded-xl bg-cinema-cream text-cinema-dark font-serifCinema font-bold text-sm hover:bg-cinema-gold transition-colors flex items-center justify-center gap-2 shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Desintoxicar / Resetar Estímulos (Voltar ao Foco)</span>
+              </button>
+            </div>
+
+            <!-- Explicação em Tempo Real do Mecanismo Psicológico/Algorítmico -->
+            <div aria-live="polite" class="p-5 rounded-2xl bg-cyber-bg/90 border-l-4 border-cyber-cyan space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span id="mechanism-tag" class="font-monoCyber text-xs font-bold uppercase text-cyber-cyan">Mecanismo: Repouso Cognitivo</span>
+                <span class="font-monoCyber text-[11px] text-slate-400">Análise em Tempo Real</span>
+              </div>
+              <h3 id="mechanism-title" class="font-sansCyber text-lg font-bold text-white">Atenção Disponível para Reflexão</h3>
+              <p id="mechanism-desc" class="text-slate-300 text-sm leading-relaxed">
+                Sem notificações constantes ou rolagem infinita, o cérebro mantém capacidade de leitura profunda e pensamento crítico — semelhante à experiência imersiva de assistir a um filme inteiro no cinema sem interrupções.
+              </p>
+            </div>
+          </div>
+
+          <!-- Coluna Direita (5 cols): Smartphone Simulado Reativo -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div id="sim-phone-frame" class="w-full max-w-[320px] rounded-[2.25rem] bg-cyber-bg border-4 border-slate-700 p-4 shadow-2xl transition-all duration-300 relative">
+              <!-- Topo do Celular com Badge Vermelho -->
+              <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                <span class="font-monoCyber text-xs text-slate-400">21:47 • 5G</span>
+                <div class="w-16 h-1.5 rounded-full bg-slate-700"></div>
+                <div class="relative inline-flex items-center">
+                  <svg class="w-5 h-5 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  <span id="phone-badge-count" class="hidden -top-2 -right-2 absolute px-1.5 py-0.2 rounded-full bg-red-600 text-white font-monoCyber text-[10px] font-bold shadow">
+                    0
+                  </span>
+                </div>
+              </div>
+
+              <!-- Feed Dinâmico Dentro do Smartphone -->
+              <div id="sim-phone-feed" class="h-[340px] overflow-y-auto space-y-2.5 pr-1">
+                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 text-center space-y-2 my-12">
+                  <p class="font-monoCyber text-xs text-cyber-cyan">[TELA EM REPOUSO]</p>
+                  <p class="text-xs text-slate-400">Clique nos gatilhos ao lado para ver como o feed reage e disputa sua atenção.</p>
+                </div>
+              </div>
+
+              <!-- Barra Inferior do Celular -->
+              <div class="pt-3 mt-3 border-t border-white/10 flex justify-around text-[11px] font-monoCyber text-slate-400">
+                <span class="text-cyber-cyan font-bold">Para Você</span>
+                <span>Seguindo</span>
+                <span>Ao Vivo</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SEÇÃO 4: GRÁFICOS DINÂMICOS DE EVOLUÇÃO DAS TELAS (1980–2026)       -->
+    <!-- =================================================================== -->
+    <section id="dados" aria-labelledby="dados-heading" class="py-16 sm:py-24 bg-cyber-surface/50 border-y border-white/10 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+          <div class="space-y-3 max-w-2xl">
+            <span class="inline-block px-3 py-1 rounded-full bg-cinema-gold/15 border border-cinema-gold/40 font-monoCyber text-xs text-cinema-gold uppercase tracking-wider">
+              Visualização de Dados • 1980 a 2026
+            </span>
+            <h2 id="dados-heading" class="text-3xl sm:text-4xl font-bold text-white">
+              A Virada Histórica das Telas em Dados
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-base">
+              Alterne entre os três indicadores sociotécnicos e clique ou passe o mouse sobre cada década para explorar a transição do consumo coletivo para a hiperpersonalização algorítmica.
+            </p>
+          </div>
+
+          <!-- Seletor de Métrica do Gráfico -->
+          <div role="tablist" aria-label="Indicadores históricos de uso das telas" class="flex flex-wrap gap-2">
+            <button type="button" role="tab" aria-selected="true" data-metric="exposure" class="chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-cyan text-cyber-bg shadow">
+              Tempo Diário (Horas)
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-metric="collective" class="chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-bg text-slate-300 border border-white/15 hover:border-white/40">
+              Coletivo vs. Individual (%)
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-metric="bubbles" class="chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-bg text-slate-300 border border-white/15 hover:border-white/40">
+              Índice de Bolhas & Fragmentação
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <!-- Container do Gráfico SVG Responsivo (8 cols) -->
+          <div class="lg:col-span-8 rounded-2xl bg-cyber-bg border border-white/15 p-4 sm:p-6 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <h3 id="chart-title" class="font-sansCyber text-lg font-bold text-white">
+                Tempo Médio Diário de Exposição (Horas/dia)
+              </h3>
+              <!-- Legenda Dinâmica -->
+              <div id="chart-legend" class="flex items-center gap-4 text-xs font-monoCyber">
+                <span class="flex items-center gap-1.5 text-cinema-gold">
+                  <span class="w-3 h-3 rounded-sm bg-cinema-gold inline-block"></span> Grandes Telas (TV/Cinema)
+                </span>
+                <span class="flex items-center gap-1.5 text-cyber-cyan">
+                  <span class="w-3 h-3 rounded-sm bg-cyber-cyan inline-block"></span> Pequenas Telas (Mobile/Apps)
+                </span>
+              </div>
+            </div>
+
+            <!-- SVG Renderizado via JavaScript -->
+            <div class="w-full overflow-hidden">
+              <svg id="evolution-svg" viewBox="0 0 760 340" class="w-full h-auto select-none" role="img" aria-label="Gráfico comparativo da evolução histórica das telas de 1980 a 2026"></svg>
+            </div>
+          </div>
+
+          <!-- Painel Contextual do Ano Selecionado (4 cols) -->
+          <aside aria-live="polite" class="lg:col-span-4 rounded-2xl bg-cyber-bg border-2 border-cinema-gold/40 p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+              <span class="font-monoCyber text-xs uppercase text-slate-400">Marco Histórico Selecionado</span>
+              <span id="detail-year" class="px-3 py-1 rounded-lg bg-cinema-gold text-cinema-dark font-monoCyber font-bold text-sm">2026</span>
+            </div>
+
+            <h4 id="detail-headline" class="font-serifCinema text-xl font-bold text-cinema-gold">
+              Hegemonia do Feed Vertical e IA Generativa
+            </h4>
+
+            <div id="detail-numbers" class="grid grid-cols-2 gap-3 font-monoCyber">
+              <div class="p-3 rounded-xl bg-white/5 border border-cinema-gold/30">
+                <span class="block text-[11px] text-slate-400">Grandes Telas</span>
+                <span id="detail-val-a" class="text-xl font-bold text-cinema-gold">2.1h/dia</span>
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-cyber-cyan/30">
+                <span class="block text-[11px] text-slate-400">Pequenas Telas</span>
+                <span id="detail-val-b" class="text-xl font-bold text-cyber-cyan">5.4h/dia</span>
+              </div>
+            </div>
+
+            <p id="detail-analysis" class="text-slate-300 text-sm leading-relaxed">
+              O smartphone consolida-se como primeira tela. Mesmo quando a TV está ligada na sala, o olhar divide-se com vídeos curtos e notificações personalizadas, aprofundando a individualização do consumo cultural.
+            </p>
+
+            <p class="text-[11px] font-monoCyber text-slate-500 pt-2">
+              * Dica: Clique em qualquer coluna no gráfico ao lado para inspecionar outras décadas.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SEÇÃO 5: DIAGNÓSTICO DE HÁBITOS DE TELA (QUIZ INTERATIVO)           -->
+    <!-- =================================================================== -->
+    <section id="diagnostico" aria-labelledby="quiz-heading" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <div class="text-center space-y-3 mb-10">
+        <span class="inline-block px-3 py-1 rounded-full bg-cyber-purple/20 border border-cyber-purple/50 font-monoCyber text-xs text-purple-300 uppercase tracking-wider">
+          Autoavaliação Crítica • Letramento Digital
+        </span>
+        <h2 id="quiz-heading" class="text-3xl sm:text-4xl font-bold text-white">
+          Diagnóstico dos Seus Hábitos de Tela
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
+          Responda a 5 perguntas rápidas sobre sua rotina digital para descobrir seu perfil entre a contemplação analógica e a imersão algorítmica.
+        </p>
+      </div>
+
+      <!-- Container do Quiz -->
+      <div class="rounded-3xl bg-cyber-surface border border-white/15 p-6 sm:p-10 shadow-2xl">
+        <!-- Tela de Perguntas -->
+        <div id="quiz-question-view" class="space-y-6">
+          <div class="flex items-center justify-between text-xs font-monoCyber text-slate-400">
+            <span id="quiz-step-label">PERGUNTA 1 DE 5</span>
+            <span id="quiz-progress-text">20% concluído</span>
+          </div>
+
+          <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+            <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-cinema-gold to-cyber-cyan transition-all duration-300" style="width: 20%;"></div>
+          </div>
+
+          <h3 id="quiz-question-text" class="font-sansCyber text-xl sm:text-2xl font-bold text-white leading-snug pt-2">
+            Carregando pergunta...
+          </h3>
+
+          <div id="quiz-options-container" class="space-y-3" role="radiogroup" aria-labelledby="quiz-question-text">
+            <!-- Opções geradas via JS -->
+          </div>
+        </div>
+
+        <!-- Tela de Resultado Personalizado (Oculta inicialmente) -->
+        <div id="quiz-result-view" class="hidden space-y-8 animate-pop-in" aria-live="polite">
+          <div class="flex flex-col md:flex-row items-center gap-6 pb-6 border-b border-white/10">
+            <!-- Gráfico Circular SVG de Equilíbrio -->
+            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12" />
+                <circle id="result-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="#00f3ff" stroke-width="12" stroke-dasharray="314" stroke-dashoffset="157" stroke-linecap="round" class="transition-all duration-700" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span id="result-algo-percent" class="font-monoCyber text-2xl font-bold text-white">50%</span>
+                <span class="text-[10px] font-monoCyber uppercase text-slate-400">Imersão</span>
+              </div>
+            </div>
+
+            <div class="space-y-2 text-center md:text-left">
+              <span class="inline-block px-3 py-1 rounded-full bg-cyber-cyan/15 border border-cyber-cyan/40 font-monoCyber text-xs text-cyber-cyan">
+                SEU PERFIL MIDIÁTICO
+              </span>
+              <h3 id="result-profile-title" class="font-serifCinema text-2xl sm:text-3xl font-bold text-cinema-gold">
+                Equilibrista Híbrido
+              </h3>
+              <p id="result-profile-desc" class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                Descrição do perfil...
+              </p>
+            </div>
+          </div>
+
+          <!-- Recomendações de Autonomia Digital -->
+          <div class="space-y-3">
+            <h4 class="font-monoCyber text-xs uppercase tracking-wider text-cyber-cyan">Recomendações Práticas de Autonomia Digital:</h4>
+            <ul id="result-recommendations" class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm text-slate-200">
+              <!-- Preenchido via JS -->
+            </ul>
+          </div>
+
+          <!-- Ações do Resultado -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
+            <button type="button" id="quiz-restart-btn" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-monoCyber text-xs sm:text-sm font-semibold transition-colors">
+              ↺ Refazer Diagnóstico
+            </button>
+
+            <button type="button" id="quiz-copy-btn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cinema-gold to-cyber-cyan text-cyber-bg font-monoCyber text-xs sm:text-sm font-bold hover:opacity-90 transition-opacity">
+              Copiar Meu Resultado
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- 6. RODAPÉ E RESUMO TÉCNICO-PEDAGÓGICO (GRID SEMÂNTICO)                -->
+  <!-- ===================================================================== -->
+  <footer class="bg-black border-t border-white/15 pt-14 pb-10 px-4 sm:px-6 lg:px-8 text-slate-300">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-white/10">
+      <!-- Coluna 1: Projeto -->
+      <div class="space-y-3">
+        <span class="font-monoCyber text-xs text-cinema-gold uppercase tracking-widest">Projeto Interdisciplinar SESI</span>
+        <h3 class="font-serifCinema text-xl font-bold text-white">Da Sala de Cinema ao Bolso</h3>
+        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+          Portal desenvolvido como atividade prática de Aprendizagem Baseada em Projetos (ABP), articulando o Ensino Médio Técnico em Desenvolvimento de Sistemas às Ciências Humanas e Sociais Aplicadas.
+        </p>
+      </div>
+
+      <!-- Coluna 2: Alinhamento BNCC -->
+      <div class="space-y-3">
+        <span class="font-monoCyber text-xs text-cyber-cyan uppercase tracking-widest">Ciências Humanas (BNCC)</span>
+        <h4 class="font-sansCyber text-base font-bold text-white">Habilidade EM13CHS603</h4>
+        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+          Análise crítica dos impactos das TDICs na percepção de tempo e espaço, nas novas dinâmicas de sociabilidade, na formação de bolhas informativas e na tensão entre Política e Antipolítica.
+        </p>
+      </div>
+
+      <!-- Coluna 3: Arquitetura Técnica -->
+      <div class="space-y-3">
+        <span class="font-monoCyber text-xs text-cyber-magenta uppercase tracking-widest">Desenvolvimento de Sistemas</span>
+        <h4 class="font-sansCyber text-base font-bold text-white">Stack & Boas Práticas</h4>
+        <ul class="text-xs sm:text-sm text-slate-400 space-y-1 font-monoCyber">
+          <li>• HTML5 Semântico & WAI-ARIA</li>
+          <li>• CSS3 Grid, Flexbox & Design Dualista</li>
+          <li>• JavaScript Vanilla ES6+ (Estado & SVG)</li>
+          <li>• Layout 100% Responsivo (Mobile-First)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-monoCyber">
+      <p>Atividade Prática: O Impacto das Telas na Sociedade (Da Cultura de Massa ao Algoritmo)</p>
+      <p>Desenvolvido para Apresentação Acadêmica • 2026</p>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: MODO APRESENTAÇÃO (FICHA TÉCNICA PARA DEFESA EM SALA)          -->
+  <!-- ===================================================================== -->
+  <div
+    id="presentation-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+  >
+    <div class="bg-cyber-surface border-2 border-cyber-cyan/60 rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 relative">
+      <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+        <div>
+          <span class="font-monoCyber text-xs text-cyber-cyan uppercase tracking-wider">Roteiro de Defesa • Equipe de Desenvolvimento</span>
+          <h2 id="modal-title" class="font-sansCyber text-2xl font-bold text-white mt-1">
+            Ficha Técnica & Fundamentação Crítica
+          </h2>
+        </div>
+        <button
+          id="close-presentation-btn"
+          type="button"
+          aria-label="Fechar janela de apresentação"
+          class="p-2 rounded-xl bg-white/10 hover:bg-cyber-magenta hover:text-white text-slate-300 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+        <div class="p-5 rounded-2xl bg-cinema-cream/10 border border-cinema-gold/40 space-y-2">
+          <h3 class="font-serifCinema text-lg font-bold text-cinema-gold">1. Defesa de Ciências Humanas</h3>
+          <ul class="space-y-2 text-slate-200 text-xs sm:text-sm leading-relaxed">
+            <li><strong>Cultura de Massa (Séc. XX):</strong> Cinema e TV criavam narrativas centralizadas e um espaço público compartilhado.</li>
+            <li><strong>Sociedade Algorítmica (Séc. XXI):</strong> Smartphones fragmentam a atenção em bolhas personalizadas.</li>
+            <li><strong>Política vs. Antipolítica:</strong> Algoritmos privilegiam a indignação moral, enfraquecendo o debate institucional e estimulando a antipolítica viral.</li>
+          </ul>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-cyber-bg border border-cyber-cyan/40 space-y-2">
+          <h3 class="font-sansCyber text-lg font-bold text-cyber-cyan">2. Defesa Técnica (Dev. Sistemas)</h3>
+          <ul class="space-y-2 text-slate-200 text-xs sm:text-sm leading-relaxed">
+            <li><strong>HTML5 Semântico:</strong> Uso rigoroso de <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code> e <code>&lt;footer&gt;</code>.</li>
+            <li><strong>Acessibilidade (WAI-ARIA):</strong> Atributos <code>aria-live</code> nos simuladores, roles de tablist/dialog e navegação por teclado.</li>
+            <li><strong>UI/UX Dualista:</strong> Contraste intencional entre paleta quente/serifada (Cinema) e dark-mode neon/monospace (Mobile).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 font-monoCyber">
+        <strong>Etapas ABP Cumpridas:</strong> [1] Pesquisa Sociológica → [2] Wireframe & Identidade Visual Dual → [3] Codificação Frontend (HTML5/CSS3/JS ES6+) → [4] Pronto para Deploy (GitHub Pages / Vercel).
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICAÇÃO NÃO-INTRUSIVO (SUBSTITUI ALERT) -->
+  <div id="custom-toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-xl bg-cyber-surface border border-cyber-cyan text-white font-monoCyber text-xs shadow-2xl">
+    Mensagem do sistema
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT PURO (ES6+): ESTADO, SIMULADOR, GRÁFICO SVG E QUIZ          -->
+  <!-- ===================================================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // -------------------------------------------------------------------
+      // UTILITÁRIO: Toast de Feedback (Nunca usar alert())
+      // -------------------------------------------------------------------
+      const toastEl = document.getElementById('custom-toast');
+      let toastTimeout = null;
+
+      function showToast(message) {
+        if (!toastEl) return;
+        toastEl.textContent = message;
+        toastEl.classList.remove('hidden');
+        toastEl.classList.add('animate-pop-in');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toastEl.classList.add('hidden');
+        }, 3200);
+      }
+
+      // -------------------------------------------------------------------
+      // 1. NAVEGAÇÃO MOBILE E MODAL DE APRESENTAÇÃO
+      // -------------------------------------------------------------------
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileNav = document.getElementById('mobile-nav');
+      const mobileLinks = document.querySelectorAll('.mobile-link');
+
+      mobileMenuBtn?.addEventListener('click', () => {
+        const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        mobileMenuBtn.setAttribute('aria-expanded', String(!isExpanded));
+        mobileNav.classList.toggle('hidden');
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.add('hidden');
+          mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      const presentationModal = document.getElementById('presentation-modal');
+      const openPresentationBtn = document.getElementById('open-presentation-btn');
+      const closePresentationBtn = document.getElementById('close-presentation-btn');
+
+      function toggleModal(show) {
+        if (!presentationModal) return;
+        if (show) {
+          presentationModal.classList.remove('hidden');
+          closePresentationBtn?.focus();
+        } else {
+          presentationModal.classList.add('hidden');
+          openPresentationBtn?.focus();
+        }
+      }
+
+      openPresentationBtn?.addEventListener('click', () => toggleModal(true));
+      closePresentationBtn?.addEventListener('click', () => toggleModal(false));
+      presentationModal?.addEventListener('click', (e) => {
+        if (e.target === presentationModal) toggleModal(false);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !presentationModal.classList.contains('hidden')) {
+          toggleModal(false);
+        }
+      });
+
+      // -------------------------------------------------------------------
+      // 2. HERO SPLIT-SCREEN INTERATIVO
+      // -------------------------------------------------------------------
+      const heroSplitRange = document.getElementById('hero-split-range');
+      const heroFocusBtns = document.querySelectorAll('.hero-focus-btn');
+
+      function updateHeroSplit(percentage) {
+        const clamped = Math.max(10, Math.min(90, Number(percentage)));
+        document.documentElement.style.setProperty('--split-pos', `${clamped}%`);
+        if (heroSplitRange) heroSplitRange.value = String(clamped);
+      }
+
+      heroSplitRange?.addEventListener('input', (e) => {
+        updateHeroSplit(e.target.value);
+      });
+
+      heroFocusBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetSplit = btn.getAttribute('data-split');
+          updateHeroSplit(targetSplit);
+        });
+      });
+
+      // -------------------------------------------------------------------
+      // 3. JORNADA COMPARATIVA (ABAS TEMÁTICAS DE CIÊNCIAS HUMANAS)
+      // -------------------------------------------------------------------
+      const comparisonData = {
+        espaco: {
+          cinemaEra: 'SÉCULO XX',
+          cinemaTitle: 'A Praça Pública Eletrônica e a Experiência Coletiva',
+          cinemaDesc: 'Ir ao cinema ou reunir a família na sala de estar para assistir ao telejornal ou à novela criava um ritual compartilhado. Mesmo sob a lógica da Indústria Cultural (Adorno & Horkheimer), havia um repertório comum: milhões de pessoas viam a mesma obra ao mesmo tempo e debatiam no dia seguinte na escola, no trabalho ou na rua.',
+          cinemaBullets: [
+            '<strong>Recepção Coletiva:</strong> Emoções vividas em grupo na sala escura ou no sofá.',
+            '<strong>Referência Comum:</strong> Construção de imaginários nacionais e memória social partilhada.',
+            '<strong>Mediação Editorial:</strong> Curadoria centralizada por emissoras, estúdios e críticos.'
+          ],
+          cinemaConcept: 'Cultura de Massa & Esfera Pública',
+          cyberEra: 'SÉCULO XXI',
+          cyberTitle: 'Isolamento Conectado e Subjetividade Fragmentada',
+          cyberDesc: 'Cada indivíduo carrega sua própria tela no bolso, personalizada em tempo real por sistemas de recomendação. Mesmo sentadas na mesma mesa, as pessoas habitam universos informativos completamente distintos, moldados por métricas de retenção e engajamento individual.',
+          cyberBullets: [
+            '<strong>Hiperpersonalização:</strong> Cada feed é único e invisível para o outro.',
+            '<strong>Erosão do Espaço Comum:</strong> Redução das experiências culturais simultâneas.',
+            '<strong>Saúde Mental & FOMO:</strong> Comparação social constante e ansiedade de conexão.'
+          ],
+          cyberConcept: 'Sociedade em Rede & Bolhas',
+          synthesis: 'A passagem da tela coletiva para a tela individual não significou apenas uma mudança de tamanho de hardware, mas uma reorganização profunda da sociabilidade: saímos da massificação homogênea para a fragmentação solitária mediada por códigos opacos.'
+        },
+        tempo: {
+          cinemaEra: 'TEMPO LINEAR',
+          cinemaTitle: 'Grade de Programação e Narrativas Contemplativas',
+          cinemaDesc: 'O espectador adaptava-se ao horário da sessão de cinema ou da programação televisiva. Filmes de duas horas exigiam concentração contínua, paciência narrativa e tolerância ao silêncio e à construção gradual de sentido.',
+          cinemaBullets: [
+            '<strong>Ritmo Cadenciado:</strong> Início, meio e fim bem definidos na experiência audiovisual.',
+            '<strong>Espera como Parte do Ritual:</strong> Aguardar o próximo capítulo semanal criava expectativa coletiva.',
+            '<strong>Foco Monotarefa:</strong> Atenção dedicada a uma única tela principal.'
+          ],
+          cinemaConcept: 'Temporalidade Linear & Atenção Profunda',
+          cyberEra: 'IMEDIATISMO',
+          cyberTitle: 'Scroll Infinito e Aceleração Temporal',
+          cyberDesc: 'Projetados sem ponto final, os feeds verticais operam na lógica do "agora". Vídeos de 15 segundos, áudios acelerados em 2x e notificações ininterruptas treinam o cérebro para a recompensa imediata e reduzem a tolerância ao tédio.',
+          cyberBullets: [
+            '<strong>Atenção Fragmentada:</strong> Troca de estímulo a cada poucos segundos.',
+            '<strong>Presente Contínuo:</strong> O conteúdo envelhece em minutos e desaparece no fluxo.',
+            '<strong>Multitarefa Ilusória:</strong> Uso simultâneo de segunda tela prejudica a memória.'
+          ],
+          cyberConcept: 'Economia da Atenção & Imediatismo',
+          synthesis: 'Como analisa o filósofo Byung-Chul Han, o excesso de estímulos positivos e a velocidade digital atrofiam a atenção contemplativa, substituindo o pensamento demorado pela reação impulsiva.'
+        },
+        politica: {
+          cinemaEra: 'POLÍTICA DE MASSAS',
+          cinemaTitle: 'Opinião Pública Centralizada e Debate Institucional',
+          cinemaDesc: 'Na era do rádio, do cinema documental e da TV aberta, o debate político organizava-se em torno de partidos, sindicatos, imprensa profissional e debates televisivos. Embora houvesse concentração midiática e propaganda, existia uma base factual comum reconhecida pela sociedade.',
+          cinemaBullets: [
+            '<strong>Mediação Jornalística:</strong> Apuração editorial e responsabilidade legal pelo conteúdo.',
+            '<strong>Confronto de Ideias:</strong> Eleitores assistiam aos mesmos debates entre candidatos.',
+            '<strong>Legitimidade Institucional:</strong> A política era vista como espaço legítimo de negociação.'
+          ],
+          cinemaConcept: 'Esfera Pública & Democracia Representativa',
+          cyberEra: 'ANTIPOLÍTICA VIRAL',
+          cyberTitle: 'Câmaras de Eco, Polarização e Antipolítica',
+          cyberDesc: 'Algoritmos de engajamento descobriram que raiva, medo e indignação moral geram mais cliques que análises equilibradas. Isso alimenta a antipolítica: a negação das instituições democráticas, da ciência e do diálogo em favor de mitos virais e teorias conspiratórias.',
+          cyberBullets: [
+            '<strong>Bolhas de Filtro:</strong> O usuário só vê conteúdos que confirmam seus vieses.',
+            '<strong>Antipolítica Performática:</strong> Rejeição sistemática à política tradicional via cortes virais.',
+            '<strong>Desinformação Escalável:</strong> Fake news circulam mais rápido que a checagem de fatos.'
+          ],
+          cyberConcept: 'Bolhas Informativas & Antipolítica',
+          synthesis: 'Quando cada grupo social passa a consumir versões incompatíveis da realidade dentro de suas bolhas algorítmicas, a própria possibilidade de pacto democrático entra em crise, abrindo espaço para o autoritarismo e a antipolítica.'
+        },
+        estetica: {
+          cinemaEra: 'ESTÉTICA CLÁSSICA',
+          cinemaTitle: 'Linguagem Cinematográfica e Cultura de Massa',
+          cinemaDesc: 'O cinema consolidou uma gramática visual universal — planos abertos, montagem dramática, trilhas orquestradas e estrelas consagradas. A cultura pop produzia ícones globais reconhecidos por diferentes gerações.',
+          cinemaBullets: [
+            '<strong>Alta Produção Técnica:</strong> Equipes especializadas e estética pensada para telas grandes.',
+            '<strong>Ícones Universais:</strong> Filmes e séries criavam referências culturais duradouras.',
+            '<strong>Fronteira Clara:</strong> Distinção nítida entre produtores profissionais e público espectador.'
+          ],
+          cinemaConcept: 'Indústria Cultural & Gramática Audiovisual',
+          cyberEra: 'MICRO-NICHOS',
+          cyberTitle: 'Estética Vertical, Remixes e Subculturas Efêmeras',
+          cyberDesc: 'A câmera frontal do smartphone inaugurou a estética da intimidade, do corte seco (jump cut), dos filtros de realidade aumentada e das "trends" que nascem e morrem em uma semana, fragmentando a cultura em milhares de micro-nichos.',
+          cyberBullets: [
+            '<strong>Prossumidor:</strong> O usuário consome, edita e republica conteúdos continuamente.',
+            '<strong>Formato Vertical (9:16):</strong> Enquadramento centrado no rosto e na reação imediata.',
+            '<strong>Padronização Algorítmica:</strong> Criadores moldam sua estética para agradar ao algoritmo.'
+          ],
+          cyberConcept: 'Cultura Participativa & Estética Algorítmica',
+          synthesis: 'Embora as pequenas telas tenham democratizado o acesso às ferramentas de produção audiovisual, os algoritmos ainda ditam o que ganha visibilidade, criando uma nova padronização disfarçada de liberdade criativa.'
+        }
+      };
+
+      const axisTabs = document.querySelectorAll('.axis-tab');
+      const compCinemaEra = document.getElementById('comp-cinema-era');
+      const compCinemaTitle = document.getElementById('comp-cinema-title');
+      const compCinemaDesc = document.getElementById('comp-cinema-desc');
+      const compCinemaBullets = document.getElementById('comp-cinema-bullets');
+      const compCinemaConcept = document.getElementById('comp-cinema-concept');
+      const compCyberEra = document.getElementById('comp-cyber-era');
+      const compCyberTitle = document.getElementById('comp-cyber-title');
+      const compCyberDesc = document.getElementById('comp-cyber-desc');
+      const compCyberBullets = document.getElementById('comp-cyber-bullets');
+      const compCyberConcept = document.getElementById('comp-cyber-concept');
+      const compSynthesisText = document.getElementById('comp-synthesis-text');
+
+      axisTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const axisKey = tab.getAttribute('data-axis');
+          const data = comparisonData[axisKey];
+          if (!data) return;
+
+          // Atualiza visual das abas
+          axisTabs.forEach(t => {
+            t.setAttribute('aria-selected', 'false');
+            t.className = 'axis-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyber-surface text-slate-300 border border-white/10 hover:border-white/30';
+          });
+          tab.setAttribute('aria-selected', 'true');
+          tab.className = 'axis-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-gradient-to-r from-cinema-gold to-cyber-cyan text-cyber-bg shadow-lg';
+
+          // Atualiza conteúdo dos cards comparativos
+          compCinemaEra.textContent = data.cinemaEra;
+          compCinemaTitle.textContent = data.cinemaTitle;
+          compCinemaDesc.textContent = data.cinemaDesc;
+          compCinemaConcept.textContent = data.cinemaConcept;
+          compCinemaBullets.innerHTML = data.cinemaBullets.map(item => `
+            <li class="flex items-start gap-2.5">
+              <span class="text-cinema-red font-bold">✦</span>
+              <span>${item}</span>
+            </li>
+          `).join('');
+
+          compCyberEra.textContent = data.cyberEra;
+          compCyberTitle.textContent = data.cyberTitle;
+          compCyberDesc.textContent = data.cyberDesc;
+          compCyberConcept.textContent = data.cyberConcept;
+          compCyberBullets.innerHTML = data.cyberBullets.map(item => `
+            <li class="flex items-start gap-2.5">
+              <span class="text-cyber-cyan font-monoCyber font-bold">&gt;</span>
+              <span>${item}</span>
+            </li>
+          `).join('');
+
+          compSynthesisText.textContent = data.synthesis;
+        });
+      });
+
+      // -------------------------------------------------------------------
+      // 4. LABORATÓRIO DE DOPAMINA (SIMULADOR INTERATIVO)
+      // -------------------------------------------------------------------
+      const labState = {
+        dopamine: 0,
+        scrolls: 0,
+        notifs: 0,
+        likes: 0
+      };
+
+      const labBox = document.getElementById('dopamine-lab-box');
+      const barFill = document.getElementById('dopamine-bar-fill');
+      const dopamineProgressBar = document.getElementById('dopamine-progressbar');
+      const percentText = document.getElementById('dopamine-percent');
+      const statusBadge = document.getElementById('dopamine-status-badge');
+      const metricScrolls = document.getElementById('metric-scrolls');
+      const metricNotifs = document.getElementById('metric-notifs');
+      const metricLikes = document.getElementById('metric-likes');
+      const notifRedDot = document.getElementById('notif-red-dot');
+      const phoneBadgeCount = document.getElementById('phone-badge-count');
+      const simPhoneFeed = document.getElementById('sim-phone-feed');
+      const simPhoneFrame = document.getElementById('sim-phone-frame');
+
+      const mechTag = document.getElementById('mechanism-tag');
+      const mechTitle = document.getElementById('mechanism-title');
+      const mechDesc = document.getElementById('mechanism-desc');
+
+      const simulatedPosts = [
+        { tag: 'VIRAL • 9s', color: 'border-cyber-cyan/50 text-cyber-cyan', text: '🔥 Você NÃO vai acreditar no que aconteceu no final desse vídeo!' },
+        { tag: 'BOLHA POLÍTICA', color: 'border-cyber-magenta/60 text-cyber-magenta', text: '⚠️ Indignação: Veja esse corte fora de contexto que confirma tudo o que você já pensa!' },
+        { tag: 'FOMO • AO VIVO', color: 'border-purple-400/60 text-purple-300', text: '🔴 14 amigos estão comentando agora. Não fique de fora da conversa!' },
+        { tag: 'VALIDAÇÃO SOCIAL', color: 'border-pink-400/60 text-pink-300', text: '❤️ +27 pessoas curtiram sua última publicação nos últimos 2 minutos.' },
+        { tag: 'RECOMPENSA VARIÁVEL', color: 'border-amber-400/60 text-amber-300', text: '🎰 Deslize mais uma vez... o próximo vídeo pode ser exatamente o que você procura.' }
+      ];
+
+      function addSimulatedPost(customText, customTag, customColor) {
+        if (!simPhoneFeed) return;
+        if (labState.scrolls + labState.notifs + labState.likes === 1) {
+          simPhoneFeed.innerHTML = '';
+        }
+        const sample = simulatedPosts[Math.floor(Math.random() * simulatedPosts.length)];
+        const postEl = document.createElement('div');
+        postEl.className = `p-3 rounded-xl bg-white/5 border ${customColor || sample.color} animate-pop-in space-y-1`;
+        postEl.innerHTML = `
+          <div class="flex items-center justify-between text-[10px] font-monoCyber font-bold">
+            <span>${customTag || sample.tag}</span>
+            <span class="text-slate-400">agora</span>
+          </div>
+          <p class="text-xs text-slate-200 leading-snug">${customText || sample.text}</p>
+        `;
+        simPhoneFeed.prepend(postEl);
+      }
+
+      function updateDopamineUI(mechanismInfo) {
+        const d = Math.min(100, Math.max(0, labState.dopamine));
+        labState.dopamine = d;
+
+        barFill.style.width = `${d}%`;
+        dopamineProgressBar.setAttribute('aria-valuenow', String(d));
+        percentText.textContent = `${d}%`;
+
+        metricScrolls.textContent = String(labState.scrolls);
+        metricNotifs.textContent = String(labState.notifs);
+        metricLikes.textContent = String(labState.likes);
+
+        if (labState.notifs > 0) {
+          notifRedDot.classList.remove('hidden');
+          phoneBadgeCount.classList.remove('hidden');
+          phoneBadgeCount.textContent = labState.notifs > 99 ? '99+' : String(labState.notifs);
+        } else {
+          notifRedDot.classList.add('hidden');
+          phoneBadgeCount.classList.add('hidden');
+        }
+
+        // Mudança visual dinâmica conforme intensidade da dopamina
+        if (d === 0) {
+          statusBadge.textContent = 'ESTADO: CALMO';
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-monoCyber font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+          labBox.classList.remove('overload-active');
+          simPhoneFrame.classList.remove('border-cyber-magenta', 'neon-magenta-glow');
+          simPhoneFrame.classList.add('border-slate-700');
+        } else if (d < 40) {
+          statusBadge.textContent = 'ESTADO: ENGAJADO';
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-monoCyber font-bold bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40';
+          labBox.classList.remove('overload-active');
+        } else if (d < 75) {
+          statusBadge.textContent = 'ESTADO: HIPERESTIMULADO';
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-monoCyber font-bold bg-purple-500/25 text-purple-300 border border-purple-400/50';
+          simPhoneFrame.classList.remove('border-slate-700');
+          simPhoneFrame.classList.add('border-cyber-cyan');
+        } else {
+          statusBadge.textContent = 'ALERTA: CAPTURA TOTAL';
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-monoCyber font-bold bg-red-600 text-white animate-pulse';
+          labBox.classList.add('overload-active');
+          simPhoneFrame.classList.remove('border-cyber-cyan');
+          simPhoneFrame.classList.add('border-cyber-magenta', 'neon-magenta-glow');
+        }
+
+        if (mechanismInfo) {
+          mechTag.textContent = mechanismInfo.tag;
+          mechTitle.textContent = mechanismInfo.title;
+          mechDesc.textContent = mechanismInfo.desc;
+        }
+      }
+
+      document.getElementById('btn-scroll-feed')?.addEventListener('click', () => {
+        labState.dopamine += 12;
+        labState.scrolls += 1;
+        addSimulatedPost();
+        updateDopamineUI({
+          tag: 'Mecanismo: Rolagem Infinita (Infinite Scroll)',
+          title: 'Eliminação das Pistas de Parada',
+          desc: 'Diferente de um livro (fim da página) ou de um filme (créditos finais), o feed infinito remove qualquer sinal natural de encerramento, induzindo o cérebro a buscar "só mais um vídeo".'
+        });
+      });
+
+      document.getElementById('btn-trigger-notif')?.addEventListener('click', () => {
+        const burst = Math.floor(Math.random() * 4) + 1;
+        labState.dopamine += 18;
+        labState.notifs += burst;
+        addSimulatedPost(`🔔 +${burst} novas notificações vermelhas aguardando sua resposta imediata!`, 'ALERTA VERMELHO', 'border-red-500/70 text-red-400');
+        updateDopamineUI({
+          tag: 'Mecanismo: Recompensa Variável & FOMO',
+          title: 'O Efeito Caça-Níquel no Bolso',
+          desc: 'A cor vermelha nos ícones dispara alerta visual de urgência. Como você nunca sabe se a notificação traz um elogio, uma fofoca ou uma briga, o sistema dopaminérgico é ativado pela incerteza.'
+        });
+      });
+
+      document.getElementById('btn-like-validate')?.addEventListener('click', () => {
+        labState.dopamine += 10;
+        labState.likes += 1;
+        addSimulatedPost('❤️ Sua opinião recebeu aprovação instantânea do seu grupo!', 'VALIDAÇÃO SOCIAL', 'border-cyber-purple/70 text-purple-300');
+        updateDopamineUI({
+          tag: 'Mecanismo: Validação Social Quantificada',
+          title: 'Aprovação Transformada em Métrica',
+          desc: 'Curtidas e visualizações condicionam o comportamento: os usuários passam a produzir e compartilhar aquilo que gera maior aprovação rápida dentro da sua bolha.'
+        });
+      });
+
+      document.getElementById('btn-intense-algo')?.addEventListener('click', () => {
+        labState.dopamine += 25;
+        labState.scrolls += 2;
+        labState.notifs += 3;
+        addSimulatedPost('⚡ MODO BOLHA ATIVO: Conteúdos polarizadores priorizados para maximizar seu tempo de tela!', 'ALGORITMO INTENSO', 'border-cyber-magenta text-cyber-magenta');
+        updateDopamineUI({
+          tag: 'Mecanismo: Polarização Algorítmica & Antipolítica',
+          title: 'Indignação como Combustível de Retenção',
+          desc: 'Quando o algoritmo detecta queda de atenção, ele injeta conteúdos emocionalmente extremos. Na política, isso favorece discursos de ódio e antipolítica porque geram comentários acalorados.'
+        });
+      });
+
+      document.getElementById('btn-detox-reset')?.addEventListener('click', () => {
+        labState.dopamine = 0;
+        labState.scrolls = 0;
+        labState.notifs = 0;
+        labState.likes = 0;
+        simPhoneFeed.innerHTML = `
+          <div class="p-4 rounded-xl bg-cinema-cream/10 border border-cinema-gold/40 text-center space-y-2 my-10 animate-pop-in">
+            <p class="font-serifCinema text-sm font-bold text-cinema-gold">Desintoxicação Concluída</p>
+            <p class="text-xs text-slate-300">Notificações silenciadas. Você retomou o controle consciente sobre onde coloca sua atenção.</p>
+          </div>
+        `;
+        updateDopamineUI({
+          tag: 'Mecanismo: Autonomia Digital & Foco',
+          title: 'Retomada da Atenção Contemplativa',
+          desc: 'Desativar notificações não essenciais e estabelecer limites de uso devolve ao indivíduo a capacidade de escolher o que assistir, ler e debater fora da pressão algorítmica.'
+        });
+        showToast('Estímulos resetados! Modo foco restaurado.');
+      });
+
+      // -------------------------------------------------------------------
+      // 5. GRÁFICOS DINÂMICOS DE EVOLUÇÃO DAS TELAS (SVG + VANILLA JS)
+      // -------------------------------------------------------------------
+      const historicalDatasets = {
+        exposure: {
+          title: 'Tempo Médio Diário de Exposição (Horas/dia)',
+          unit: 'h/dia',
+          maxVal: 7,
+          labelA: 'Grandes Telas (TV/Cinema)',
+          labelB: 'Pequenas Telas (Mobile/Apps)',
+          colorA: '#d4af37',
+          colorB: '#00f3ff',
+          points: [
+            { year: '1980', a: 3.2, b: 0.0, headline: 'A Hegemonia da TV Aberta na Sala', analysis: 'A televisão aberta estruturava a rotina noturna das famílias. O cinema era o grande evento cultural fora de casa, sem concorrência de telas portáteis.' },
+            { year: '1990', a: 3.8, b: 0.2, headline: 'TV a Cabo, Videocassete e Primeiros PCs', analysis: 'A popularização do VHS e da TV por assinatura ampliou as opções de canais, mas o consumo permanecia fixo no ambiente doméstico e coletivo.' },
+            { year: '2000', a: 4.0, b: 0.9, headline: 'Internet Discada e Portais Web', analysis: 'Os computadores pessoais começam a disputar o tempo livre, embora o acesso ainda fosse limitado a horários específicos e conexões fixas.' },
+            { year: '2010', a: 3.5, b: 2.3, headline: 'Popularização dos Smartphones e 3G', analysis: 'Com a chegada dos smartphones e das primeiras redes sociais móveis, a tela sai da mesa e acompanha o usuário no transporte, na escola e no trabalho.' },
+            { year: '2018', a: 2.7, b: 4.4, headline: 'Virada dos Feeds Algorítmicos e Vídeos Curtos', analysis: 'Pela primeira vez, o tempo gasto em pequenas telas supera amplamente a TV tradicional. O algoritmo passa a ditar o consumo audiovisual.' },
+            { year: '2026', a: 2.1, b: 5.4, headline: 'Hegemonia do Feed Vertical e IA Generativa', analysis: 'O smartphone consolida-se como primeira tela. Mesmo quando a TV está ligada na sala, o olhar divide-se com vídeos curtos e notificações personalizadas.' }
+          ]
+        },
+        collective: {
+          title: 'Consumo Audiovisual Coletivo vs. Individualizado (%)',
+          unit: '%',
+          maxVal: 100,
+          labelA: 'Experiência Coletiva (Sala/Cinema)',
+          labelB: 'Experiência Individual (Tela Própria)',
+          colorA: '#d4af37',
+          colorB: '#ff007f',
+          points: [
+            { year: '1980', a: 90, b: 10, headline: 'Ritual Familiar e Cinema Lotado', analysis: '90% do consumo de imagens ocorria em espaços compartilhados, gerando forte coesão cultural e repertório comum entre gerações.' },
+            { year: '1990', a: 82, b: 18, headline: 'Segunda TV no Quarto', analysis: 'A entrada de televisores menores nos quartos inicia uma leve individualização, mas os grandes eventos nacionais ainda uniam toda a audiência.' },
+            { year: '2000', a: 70, b: 30, headline: 'Início da Fragmentação Digital', analysis: 'Fóruns, blogs e downloads criam comunidades de interesse específicas, reduzindo parcialmente o monopólio das grandes emissoras.' },
+            { year: '2010', a: 48, b: 52, headline: 'Ponto de Inflexão: A Tela Pessoal', analysis: 'O consumo individual ultrapassa o coletivo. Fones de ouvido e telas individuais criam "ilhas privadas" dentro dos espaços públicos.' },
+            { year: '2018', a: 25, b: 75, headline: 'Streaming Sob Demanda e Feeds Únicos', analysis: 'Cada membro da casa assiste a uma série diferente no seu próprio dispositivo enquanto navega em feeds personalizados.' },
+            { year: '2026', a: 14, b: 86, headline: 'Hiperindividualização Algorítmica', analysis: '86% do consumo midiático é individualizado, reduzindo as experiências culturais simultâneas e desafiando a construção de consensos sociais.' }
+          ]
+        },
+        bubbles: {
+          title: 'Índice de Fragmentação da Atenção e Bolhas Informativas (0–100)',
+          unit: ' pts',
+          maxVal: 100,
+          labelA: 'Coesão da Esfera Pública',
+          labelB: 'Índice de Bolhas & Polarização',
+          colorA: '#d4af37',
+          colorB: '#8a2be2',
+          points: [
+            { year: '1980', a: 85, b: 12, headline: 'Esfera Pública Centralizada', analysis: 'Baixa fragmentação: a sociedade compartilhava os mesmos telejornais e fatos básicos, ainda que sob forte controle editorial.' },
+            { year: '1990', a: 80, b: 18, headline: 'Segmentação por Canais Temáticos', analysis: 'Canais especializados de notícias e esportes segmentam públicos, mas mantêm padrões jornalísticos compartilhados.' },
+            { year: '2000', a: 72, b: 28, headline: 'Web 1.0 e Primeiras Comunidades', analysis: 'A internet amplia o acesso a fontes alternativas, ainda dependente de busca ativa por parte do usuário.' },
+            { year: '2010', a: 55, b: 49, headline: 'Nascimento dos Feeds Ordenados por Algoritmo', analysis: 'As redes abandonam a ordem cronológica e passam a filtrar o que gera mais curtidas, iniciando o efeito "bolha de filtro".' },
+            { year: '2018', a: 32, b: 78, headline: 'Explosão das Câmaras de Eco e Antipolítica', analysis: 'A viralização de cortes emocionais e desinformação intensifica a polarização política e a desconfiança nas instituições.' },
+            { year: '2026', a: 24, b: 88, headline: 'Realidades Paralelas Hiperpersonalizadas', analysis: 'Com curadoria automatizada de alta precisão, grupos distintos habitam ecossistemas informativos quase incomunicáveis entre si.' }
+          ]
+        }
+      };
+
+      let currentMetricKey = 'exposure';
+      let selectedYearIdx = 5; // 2026 por padrão
+
+      const svgEl = document.getElementById('evolution-svg');
+      const chartTitleEl = document.getElementById('chart-title');
+      const chartLegendEl = document.getElementById('chart-legend');
+      const detailYearEl = document.getElementById('detail-year');
+      const detailHeadlineEl = document.getElementById('detail-headline');
+      const detailValAEl = document.getElementById('detail-val-a');
+      const detailValBEl = document.getElementById('detail-val-b');
+      const detailAnalysisEl = document.getElementById('detail-analysis');
+
+      function updateChartDetailPanel(dataset, idx) {
+        const pt = dataset.points[idx];
+        if (!pt) return;
+        detailYearEl.textContent = pt.year;
+        detailHeadlineEl.textContent = pt.headline;
+        detailValAEl.textContent = `${pt.a}${dataset.unit}`;
+        detailValAEl.style.color = dataset.colorA;
+        detailValBEl.textContent = `${pt.b}${dataset.unit}`;
+        detailValBEl.style.color = dataset.colorB;
+        detailAnalysisEl.textContent = pt.analysis;
+      }
+
+      function renderEvolutionChart() {
+        const dataset = historicalDatasets[currentMetricKey];
+        if (!dataset || !svgEl) return;
+
+        chartTitleEl.textContent = dataset.title;
+        chartLegendEl.innerHTML = `
+          <span class="flex items-center gap-1.5" style="color: ${dataset.colorA}">
+            <span class="w-3 h-3 rounded-sm inline-block" style="background-color: ${dataset.colorA}"></span> ${dataset.labelA}
+          </span>
+          <span class="flex items-center gap-1.5" style="color: ${dataset.colorB}">
+            <span class="w-3 h-3 rounded-sm inline-block" style="background-color: ${dataset.colorB}"></span> ${dataset.labelB}
+          </span>
+        `;
+
+        const width = 760;
+        const height = 340;
+        const padLeft = 52;
+        const padRight = 24;
+        const padTop = 24;
+        const padBottom = 46;
+        const plotW = width - padLeft - padRight;
+        const plotH = height - padTop - padBottom;
+
+        let svgContent = '';
+
+        // Linhas de grade horizontais (5 níveis)
+        for (let i = 0; i <= 4; i++) {
+          const ratio = i / 4;
+          const y = padTop + plotH - ratio * plotH;
+          const tickVal = Math.round(ratio * dataset.maxVal * 10) / 10;
+          svgContent += `
+            <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="rgba(255,255,255,0.08)" stroke-dasharray="4 4" />
+            <text x="${padLeft - 10}" y="${y + 4}" text-anchor="end" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="11">${tickVal}</text>
+          `;
+        }
+
+        const groupCount = dataset.points.length;
+        const groupWidth = plotW / groupCount;
+        const barWidth = Math.min(28, groupWidth * 0.28);
+
+        dataset.points.forEach((pt, idx) => {
+          const centerX = padLeft + groupWidth * idx + groupWidth / 2;
+          const isSelected = idx === selectedYearIdx;
+
+          const hA = (pt.a / dataset.maxVal) * plotH;
+          const hB = (pt.b / dataset.maxVal) * plotH;
+          const yA = padTop + plotH - hA;
+          const yB = padTop + plotH - hB;
+
+          // Destaque de fundo para o ano selecionado
+          if (isSelected) {
+            svgContent += `
+              <rect x="${centerX - groupWidth * 0.44}" y="${padTop - 6}" width="${groupWidth * 0.88}" height="${plotH + 12}" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.5)" stroke-width="1.5" />
+            `;
+          }
+
+          // Barra A (Grandes Telas)
+          svgContent += `
+            <rect x="${centerX - barWidth - 3}" y="${yA}" width="${barWidth}" height="${Math.max(2, hA)}" rx="5" fill="${dataset.colorA}" opacity="${isSelected ? '1' : '0.78'}" />
+            <text x="${centerX - barWidth / 2 - 3}" y="${yA - 6}" text-anchor="middle" fill="${dataset.colorA}" font-family="JetBrains Mono, monospace" font-size="10" font-weight="bold">${pt.a}</text>
+          `;
+
+          // Barra B (Pequenas Telas)
+          svgContent += `
+            <rect x="${centerX + 3}" y="${yB}" width="${barWidth}" height="${Math.max(2, hB)}" rx="5" fill="${dataset.colorB}" opacity="${isSelected ? '1' : '0.82'}" />
+            <text x="${centerX + barWidth / 2 + 3}" y="${yB - 6}" text-anchor="middle" fill="${dataset.colorB}" font-family="JetBrains Mono, monospace" font-size="10" font-weight="bold">${pt.b}</text>
+          `;
+
+          // Rótulo do Ano
+          svgContent += `
+            <text x="${centerX}" y="${height - 14}" text-anchor="middle" fill="${isSelected ? '#ffffff' : '#94a3b8'}" font-family="JetBrains Mono, monospace" font-size="12" font-weight="${isSelected ? 'bold' : 'normal'}">${pt.year}</text>
+          `;
+
+          // Área clicável invisível para melhor usabilidade
+          svgContent += `
+            <rect data-year-idx="${idx}" x="${centerX - groupWidth / 2}" y="${padTop}" width="${groupWidth}" height="${plotH + 34}" fill="transparent" style="cursor: pointer;" />
+          `;
+        });
+
+        svgEl.innerHTML = svgContent;
+
+        // Eventos de clique/hover nas colunas
+        svgEl.querySelectorAll('rect[data-year-idx]').forEach(hitRect => {
+          hitRect.addEventListener('click', () => {
+            selectedYearIdx = Number(hitRect.getAttribute('data-year-idx'));
+            renderEvolutionChart();
+            updateChartDetailPanel(dataset, selectedYearIdx);
+          });
+        });
+
+        updateChartDetailPanel(dataset, selectedYearIdx);
+      }
+
+      document.querySelectorAll('.chart-metric-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentMetricKey = btn.getAttribute('data-metric');
+          document.querySelectorAll('.chart-metric-btn').forEach(b => {
+            b.setAttribute('aria-selected', 'false');
+            b.className = 'chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-bg text-slate-300 border border-white/15 hover:border-white/40';
+          });
+          btn.setAttribute('aria-selected', 'true');
+          btn.className = 'chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-cyan text-cyber-bg shadow';
+          renderEvolutionChart();
+        });
+      });
+
+      renderEvolutionChart();
+
+      // -------------------------------------------------------------------
+      // 6. DIAGNÓSTICO DE HÁBITOS DE TELA (QUIZ INTERATIVO DE 5 PERGUNTAS)
+      // -------------------------------------------------------------------
+      const quizQuestions = [
+        {
+          question: '1. Qual é o seu primeiro hábito nos 10 minutos iniciais após acordar?',
+          options: [
+            { text: 'Levanto, tomo café ou olho pela janela antes de pegar o celular.', score: 1 },
+            { text: 'Olho apenas o horário e mensagens urgentes, sem abrir redes sociais.', score: 2 },
+            { text: 'Abro rapidamente o feed ou mensagens ainda na cama.', score: 3 },
+            { text: 'Fico 20 minutos ou mais rolando vídeos curtos e notificações antes de levantar.', score: 4 }
+          ]
+        },
+        {
+          question: '2. Como você assiste a um filme de 2 horas ou a uma aula/documentário longo?',
+          options: [
+            { text: 'Assisto do início ao fim com atenção total, sem mexer no celular.', score: 1 },
+            { text: 'Assisto focado na maior parte do tempo, olhando o celular só em pausas.', score: 2 },
+            { text: 'Uso o celular como "segunda tela" enquanto o filme passa ao fundo.', score: 3 },
+            { text: 'Tenho dificuldade de terminar obras longas; prefiro resumos ou vídeos em 2x.', score: 4 }
+          ]
+        },
+        {
+          question: '3. Como você reage quando uma notificação aparece na tela enquanto estuda ou conversa?',
+          options: [
+            { text: 'Minhas notificações não essenciais ficam silenciadas durante tarefas importantes.', score: 1 },
+            { text: 'Vejo o alerta acender, mas termino o que estou fazendo antes de checar.', score: 2 },
+            { text: 'Interrompo o que estou fazendo quase imediatamente para olhar.', score: 3 },
+            { text: 'Checo o celular mesmo quando ele não vibrou, por hábito automático.', score: 4 }
+          ]
+        },
+        {
+          question: '4. Como você costuma se informar sobre política e acontecimentos sociais?',
+          options: [
+            { text: 'Busco veículos jornalísticos diversos e leio reportagens completas.', score: 1 },
+            { text: 'Acompanho portais de notícias e checo fontes quando vejo algo polêmico.', score: 2 },
+            { text: 'Me informo principalmente pelo que aparece na aba "Para Você" das redes.', score: 3 },
+            { text: 'Consumo cortes virais de 15 segundos que geram indignação imediata.', score: 4 }
+          ]
+        },
+        {
+          question: '5. Quando você está em um momento de lazer com amigos ou família:',
+          options: [
+            { text: 'O celular fica guardado no bolso ou na mochila durante o encontro.', score: 1 },
+            { text: 'Uso apenas para tirar uma foto ou mostrar algo pontual ao grupo.', score: 2 },
+            { text: 'Checo o feed sempre que a conversa dá uma pequena pausa.', score: 3 },
+            { text: 'Cada pessoa fica olhando sua própria tela na maior parte do tempo.', score: 4 }
+          ]
+        }
+      ];
+
+      let currentQuestionIdx = 0;
+      let totalQuizScore = 0;
+
+      const questionView = document.getElementById('quiz-question-view');
+      const resultView = document.getElementById('quiz-result-view');
+      const stepLabel = document.getElementById('quiz-step-label');
+      const progressText = document.getElementById('quiz-progress-text');
+      const quizProgressBar = document.getElementById('quiz-progress-bar');
+      const questionText = document.getElementById('quiz-question-text');
+      const optionsContainer = document.getElementById('quiz-options-container');
+
+      function renderQuizQuestion() {
+        const q = quizQuestions[currentQuestionIdx];
+        const stepNum = currentQuestionIdx + 1;
+        const pct = Math.round((stepNum / quizQuestions.length) * 100);
+
+        stepLabel.textContent = `PERGUNTA ${stepNum} DE ${quizQuestions.length}`;
+        progressText.textContent = `${pct}% concluído`;
+        quizProgressBar.style.width = `${pct}%`;
+        questionText.textContent = q.question;
+
+        optionsContainer.innerHTML = q.options.map((opt, idx) => `
+          <button
+            type="button"
+            data-score="${opt.score}"
+            class="quiz-opt-btn w-full text-left p-4 rounded-2xl bg-cyber-bg border border-white/15 hover:border-cyber-cyan hover:bg-cyber-cyan/10 transition-all flex items-center gap-3.5 group"
+          >
+            <span class="w-7 h-7 rounded-lg bg-white/5 border border-white/20 group-hover:border-cyber-cyan group-hover:text-cyber-cyan font-monoCyber text-xs font-bold flex items-center justify-center shrink-0">
+              ${String.fromCharCode(65 + idx)}
+            </span>
+            <span class="text-sm sm:text-base text-slate-200 group-hover:text-white">${opt.text}</span>
+          </button>
+        `).join('');
+
+        optionsContainer.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            totalQuizScore += Number(btn.getAttribute('data-score'));
+            if (currentQuestionIdx < quizQuestions.length - 1) {
+              currentQuestionIdx += 1;
+              renderQuizQuestion();
+            } else {
+              showQuizResult();
+            }
+          });
+        });
+      }
+
+      function showQuizResult() {
+        questionView.classList.add('hidden');
+        resultView.classList.remove('hidden');
+
+        // Pontuação varia de 5 (mínimo) a 20 (máximo) -> converter para % de imersão algorítmica
+        const immersionPct = Math.round(((totalQuizScore - 5) / 15) * 100);
+        const circumference = 314;
+        const offset = circumference - (immersionPct / 100) * circumference;
+
+        const ringCircle = document.getElementById('result-ring-circle');
+        const percentDisplay = document.getElementById('result-algo-percent');
+        const profileTitle = document.getElementById('result-profile-title');
+        const profileDesc = document.getElementById('result-profile-desc');
+        const recList = document.getElementById('result-recommendations');
+
+        percentDisplay.textContent = `${immersionPct}%`;
+        ringCircle.style.strokeDashoffset = String(offset);
+
+        let profile = {};
+
+        if (totalQuizScore <= 8) {
+          ringCircle.setAttribute('stroke', '#d4af37');
+          profile = {
+            title: 'Espectador Contemplativo',
+            desc: 'Você preserva fortemente a atenção profunda e os espaços coletivos. Seu uso de telas é intencional e você dificilmente cai nas armadilhas do scroll infinito ou das bolhas emocionais.',
+            recs: [
+              'Compartilhe suas estratégias de foco e curadoria de fontes com colegas da turma.',
+              'Continue valorizando experiências culturais coletivas (cinema, teatro, debates presenciais).',
+              'Mantenha o hábito de verificar fontes primárias antes de repassar informações.'
+            ]
+          };
+        } else if (totalQuizScore <= 12) {
+          ringCircle.setAttribute('stroke', '#00f3ff');
+          profile = {
+            title: 'Navegador Crítico',
+            desc: 'Você transita bem entre as duas eras: aproveita a agilidade das pequenas telas, mas mantém senso crítico para não deixar o algoritmo ditar totalmente sua rotina ou sua visão política.',
+            recs: [
+              'Experimente reservar 1 hora antes de dormir livre de notificações e feeds verticais.',
+              'Siga intencionalmente perfis e veículos com perspectivas diferentes para furar bolhas.',
+              'Pratique assistir a obras longas sem o celular por perto uma vez por semana.'
+            ]
+          };
+        } else if (totalQuizScore <= 16) {
+          ringCircle.setAttribute('stroke', '#8a2be2');
+          profile = {
+            title: 'Equilibrista sob Pressão Algorítmica',
+            desc: 'Seus hábitos mostram sinais claros da economia da atenção: o uso de segunda tela e a checagem frequente de notificações já fragmentam parte do seu tempo de foco e descanso.',
+            recs: [
+              'Desative badges vermelhos e notificações push de redes sociais no celular.',
+              'Evite levar o smartphone para a cama nos primeiros e últimos 20 minutos do dia.',
+              'Desconfie de vídeos políticos muito curtos que provocam raiva imediata: busque o contexto.'
+            ]
+          };
+        } else {
+          ringCircle.setAttribute('stroke', '#ff007f');
+          profile = {
+            title: 'Imerso no Algoritmo',
+            desc: 'Alerta de captura de atenção! O feed infinito e os estímulos rápidos estão dominando seu tempo e tolerância ao foco. Isso aumenta a ansiedade digital e torna você mais vulnerável a bolhas informativas.',
+            recs: [
+              'Ative o modo "Tempo de Uso / Bem-Estar Digital" e defina limites diários para vídeos curtos.',
+              'Recupere o hábito das grandes telas: assista a um filme inteiro com amigos ou família sem celular.',
+              'Diversifique suas fontes de informação fora das abas de recomendação automática.'
+            ]
+          };
+        }
+
+        profileTitle.textContent = profile.title;
+        profileDesc.textContent = profile.desc;
+        recList.innerHTML = profile.recs.map((rec, i) => `
+          <li class="p-4 rounded-xl bg-cyber-bg border border-white/10 space-y-1.5">
+            <span class="font-monoCyber text-xs font-bold text-cyber-cyan">AÇÃO 0${i + 1}</span>
+            <p class="leading-relaxed">${rec}</p>
+          </li>
+        `).join('');
+      }
+
+      document.getElementById('quiz-restart-btn')?.addEventListener('click', () => {
+        currentQuestionIdx = 0;
+        totalQuizScore = 0;
+        resultView.classList.add('hidden');
+        questionView.classList.remove('hidden');
+        renderQuizQuestion();
+      });
+
+      document.getElementById('quiz-copy-btn')?.addEventListener('click', () => {
+        const title = document.getElementById('result-profile-title')?.textContent || '';
+        const pct = document.getElementById('result-algo-percent')?.textContent || '';
+        const summary = `Diagnóstico "Da Sala de Cinema ao Bolso" (BNCC EM13CHS603): Meu perfil midiático é "${title}" (${pct} de imersão algorítmica).`;
+
+        const tempInput = document.createElement('textarea');
+        tempInput.value = summary;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+          document.execCommand('copy');
+          showToast('Resultado copiado para a área de transferência!');
+        } catch (err) {
+          showToast('Não foi possível copiar automaticamente.');
+        }
+        document.body.removeChild(tempInput);
+      });
+
+      renderQuizQuestion();
+    });
+  </script>
+</body>
+</html>
