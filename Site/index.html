@@ -140,6 +140,26 @@
       animation: floatUpFade 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
+    .presentation-shell { min-height: min(720px, calc(100vh - 2rem)); }
+    .presentation-slide { display: none; height: 100%; animation: floatUpFade 0.28s ease-out; }
+    .presentation-slide.is-active { display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; }
+    .slide-kicker { font: 700 0.8rem 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; }
+    .slide-title { color: #fff; font-size: clamp(2rem, 5vw, 4.6rem); line-height: 1.04; max-width: 920px; }
+    .slide-lead { color: #cbd5e1; font-size: clamp(1rem, 2vw, 1.45rem); line-height: 1.55; max-width: 820px; }
+    .slide-highlight { display: flex; flex-direction: column; gap: .45rem; max-width: 760px; padding: 1.2rem 1.35rem; border-width: 1px; border-radius: 1rem; color: #e2e8f0; }
+    .slide-highlight strong { color: #fff; font: 700 1rem 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }
+    .slide-columns, .slide-stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 900px; }
+    .slide-columns > div, .slide-stat-grid > span { padding: 1.25rem; border: 1px solid rgba(255,255,255,.12); border-radius: 1rem; background: rgba(255,255,255,.04); color: #cbd5e1; line-height: 1.55; }
+    .slide-columns h4 { margin-bottom: .45rem; font: 700 1rem 'JetBrains Mono', monospace; }
+    .slide-stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .slide-stat-grid strong { display: block; color: #fff; font: 700 1.8rem 'JetBrains Mono', monospace; margin-bottom: .4rem; }
+    .slide-control { padding: .65rem 1rem; border-radius: .75rem; background: rgba(255,255,255,.08); color: #e2e8f0; font: 600 .78rem 'JetBrains Mono', monospace; transition: .2s; }
+    .slide-control:hover { background: rgba(255,255,255,.16); }
+    .slide-control-primary { background: #00d9e8; color: #071018; }
+    .slide-control-primary:hover { background: #62f3ff; }
+    .presentation-legacy { display: none !important; }
+    @media (max-width: 640px) { .slide-columns, .slide-stat-grid { grid-template-columns: 1fr; } .presentation-shell { min-height: calc(100vh - 2rem); } }
+
     /* Customização do input range do Hero */
     input[type="range"].split-slider {
       -webkit-appearance: none;
@@ -200,19 +220,6 @@
 
       <!-- Botão Modo Apresentação (Defesa Técnica e Pedagógica em Sala) -->
       <div class="flex items-center gap-2">
-        <button
-          id="open-presentation-btn"
-          type="button"
-          aria-haspopup="dialog"
-          aria-controls="presentation-modal"
-          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-gradient-to-r from-cinema-gold/20 to-cyber-cyan/20 border border-cyber-cyan/50 text-white hover:border-cyber-cyan hover:shadow-[0_0_15px_rgba(0,243,255,0.35)] transition-all focus:outline-none focus:ring-2 focus:ring-cyber-cyan"
-        >
-          <svg class="w-4 h-4 text-cyber-cyan shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-          <span>Modo Apresentação</span>
-        </button>
-
         <!-- Botão Menu Mobile -->
         <button
           id="mobile-menu-btn"
@@ -263,14 +270,8 @@
 
           <!-- Botões de Foco Rápido -->
           <div class="flex flex-wrap items-center justify-center gap-2" role="group" aria-label="Controles de visualização comparativa do banner">
-            <button type="button" data-split="85" class="hero-focus-btn px-3 py-1.5 rounded-lg text-xs font-serifCinema font-bold bg-cinema-cream text-cinema-dark border border-cinema-gold hover:bg-cinema-gold transition-colors">
-              Focar Cinema & TV
-            </button>
             <button type="button" data-split="50" class="hero-focus-btn px-3 py-1.5 rounded-lg text-xs font-monoCyber font-semibold bg-white/10 text-white border border-white/25 hover:bg-white/20 transition-colors">
               50% / 50%
-            </button>
-            <button type="button" data-split="15" class="hero-focus-btn px-3 py-1.5 rounded-lg text-xs font-monoCyber font-bold bg-cyber-surface text-cyber-cyan border border-cyber-cyan/60 hover:bg-cyber-cyan hover:text-cyber-bg transition-colors">
-              Focar Smartphone & Algoritmo
             </button>
           </div>
         </div>
@@ -367,17 +368,6 @@
                 </div>
               </div>
 
-              <!-- Decoração Projetor / Tela Panorâmica (Alinhada sem sobrepor texto) -->
-              <div aria-hidden="true" class="hidden xl:flex shrink-0 w-44 h-32 rounded-xl border-4 border-cinema-dark bg-cinema-sepia p-2.5 flex-col justify-between shadow-xl pointer-events-none">
-                <div class="flex items-center justify-between text-[9px] font-monoCyber text-cinema-gold">
-                  <span>● REC 35MM</span>
-                  <span>24 FPS</span>
-                </div>
-                <div class="border border-cinema-gold/40 rounded h-16 flex items-center justify-center bg-cinema-dark/80 px-2 text-center">
-                  <span class="font-serifCinema italic text-cinema-gold text-xs tracking-widest">SESSÃO DAS OITO</span>
-                </div>
-                <div class="h-1 bg-cinema-gold/40 rounded-full w-3/4 mx-auto"></div>
-              </div>
             </div>
           </div>
 
@@ -478,10 +468,6 @@
             </div>
           </div>
 
-          <div class="bg-cinema-dark/10 px-6 py-4 border-t border-cinema-dark/15 flex items-center justify-between text-xs font-serifCinema font-bold text-cinema-red">
-            <span>Conceito-chave:</span>
-            <span id="comp-cinema-concept" class="uppercase tracking-wider">Cultura de Massa & Esfera Pública</span>
-          </div>
         </article>
 
         <!-- Card Direito: Era das Pequenas Telas (Estética Cyberpunk/Algorítmica) -->
@@ -518,27 +504,9 @@
             </ul>
           </div>
 
-          <div class="bg-black/40 px-6 py-4 border-t border-white/10 flex items-center justify-between text-xs font-monoCyber text-cyber-cyan">
-            <span>Conceito-chave:</span>
-            <span id="comp-cyber-concept" class="uppercase tracking-wider">Sociedade em Rede & Bolhas</span>
-          </div>
         </article>
       </div>
 
-      <!-- Caixa de Síntese Crítica (Ciências Humanas) -->
-      <aside aria-label="Síntese crítica de Ciências Humanas" class="mt-8 rounded-2xl bg-gradient-to-r from-cinema-sepia/60 via-cyber-surface to-cyber-purple/20 border border-white/15 p-6 sm:p-7 flex flex-col md:flex-row items-start md:items-center gap-5">
-        <div class="w-12 h-12 rounded-xl bg-cinema-gold/20 border border-cinema-gold/50 flex items-center justify-center text-cinema-gold shrink-0">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        </div>
-        <div class="space-y-1">
-          <h4 class="font-monoCyber text-xs uppercase tracking-widest text-cinema-gold">Síntese Crítica • Habilidade EM13CHS603</h4>
-          <p id="comp-synthesis-text" class="text-sm sm:text-base text-slate-200 leading-relaxed">
-            A passagem da tela coletiva para a tela individual não significou apenas uma mudança de tamanho de hardware, mas uma reorganização profunda da sociabilidade: saímos da massificação homogênea para a fragmentação solitária mediada por códigos opacos.
-          </p>
-        </div>
-      </aside>
     </section>
 
     <!-- =================================================================== -->
@@ -764,7 +732,7 @@
           <!-- Seletor de Métrica do Gráfico -->
           <div role="tablist" aria-label="Indicadores históricos de uso das telas" class="flex flex-wrap gap-2">
             <button type="button" role="tab" aria-selected="true" data-metric="exposure" class="chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-cyan text-cyber-bg shadow">
-              Tempo Diário (Horas)
+              Acesso por Equipamento (%)
             </button>
             <button type="button" role="tab" aria-selected="false" data-metric="collective" class="chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-bg text-slate-300 border border-white/15 hover:border-white/40">
               Coletivo vs. Individual (%)
@@ -812,11 +780,11 @@
 
             <div id="detail-numbers" class="grid grid-cols-2 gap-3 font-monoCyber">
               <div class="p-3 rounded-xl bg-white/5 border border-cinema-gold/30">
-                <span class="block text-[11px] text-slate-400">Grandes Telas</span>
+                <span id="detail-label-a" class="block text-[11px] text-slate-400">Televisão</span>
                 <span id="detail-val-a" class="text-xl font-bold text-cinema-gold">2.1h/dia</span>
               </div>
               <div class="p-3 rounded-xl bg-white/5 border border-cyber-cyan/30">
-                <span class="block text-[11px] text-slate-400">Pequenas Telas</span>
+                <span id="detail-label-b" class="block text-[11px] text-slate-400">Telefone celular</span>
                 <span id="detail-val-b" class="text-xl font-bold text-cyber-cyan">5.4h/dia</span>
               </div>
             </div>
@@ -828,7 +796,29 @@
             <p class="text-[11px] font-monoCyber text-slate-500 pt-2">
               * Dica: Clique em qualquer coluna no gráfico ao lado para inspecionar outras décadas.
             </p>
+            <p id="chart-source-note" class="text-[11px] font-monoCyber text-cyber-cyan/80 border-t border-white/10 pt-3">
+              Fonte: indicador selecionado.
+            </p>
           </aside>
+        </div>
+
+        <div class="mt-8 rounded-2xl bg-cyber-bg border border-cinema-gold/30 p-5 sm:p-6">
+          <div class="flex items-start gap-3">
+            <span class="text-cinema-gold text-xl" aria-hidden="true">▣</span>
+            <div class="space-y-3">
+              <h3 class="font-sansCyber text-lg font-bold text-white">Fontes e nota metodológica</h3>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Os gráficos combinam referências públicas sobre acesso, posse e uso de telas para ilustrar a mudança histórica. Os valores por década são uma reconstrução didática do projeto, não uma série estatística oficial única; por isso, devem ser lidos como estimativas visuais de tendência, e não como medição exata de cada ano.
+              </p>
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <li><a class="text-cyber-cyan hover:underline" href="https://agenciadenoticias.ibge.gov.br/media/com_mediaibge/arquivos/b433a668d9b22364c742c3fab5c8f227.pdf" target="_blank" rel="noopener noreferrer">IBGE — PNAD Contínua TIC 2023</a><span class="block text-slate-500">Internet, televisão e celular no Brasil.</span></li>
+                <li><a class="text-cyber-cyan hover:underline" href="https://agenciadenoticias.ibge.gov.br/media/com_mediaibge/arquivos/b6c6d2b70f490c4eba9e52403fcec31b.pdf" target="_blank" rel="noopener noreferrer">IBGE — PNAD Contínua TIC 2016–2024</a><span class="block text-slate-500">Série oficial por equipamento de acesso à Internet.</span></li>
+                <li><a class="text-cyber-cyan hover:underline" href="https://cetic.br/media/docs/publicacoes/2/20240826111431/tic_domicilios_2023_livro_eletronico.pdf" target="_blank" rel="noopener noreferrer">Cetic.br / CGI.br — TIC Domicílios 2023</a><span class="block text-slate-500">Acesso, frequência e dispositivos de conexão.</span></li>
+                <li><a class="text-cyber-cyan hover:underline" href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener noreferrer">Reuters Institute — Digital News Report 2024</a><span class="block text-slate-500">Plataformas, vídeo e consumo de notícias.</span></li>
+                <li><a class="text-cyber-cyan hover:underline" href="https://www.pewresearch.org/internet/2024/12/12/teens-social-media-and-technology-2024/" target="_blank" rel="noopener noreferrer">Pew Research Center — Teens, Social Media and Technology 2024</a><span class="block text-slate-500">Uso de smartphones e conexão frequente entre adolescentes.</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -950,11 +940,13 @@
       <div class="space-y-3">
         <span class="font-monoCyber text-xs text-cyber-magenta uppercase tracking-widest">Desenvolvimento de Sistemas</span>
         <h4 class="font-sansCyber text-base font-bold text-white">Stack & Boas Práticas</h4>
+        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+          Tecnologias utilizadas no desenvolvimento do projeto, seguindo boas práticas de programação e design.
+        </p>
         <ul class="text-xs sm:text-sm text-slate-400 space-y-1 font-monoCyber">
-          <li>• HTML5 Semântico & WAI-ARIA</li>
-          <li>• CSS3 Grid, Flexbox & Design Dualista</li>
-          <li>• JavaScript Vanilla ES6+ (Estado & SVG)</li>
-          <li>• Layout 100% Responsivo (Mobile-First)</li>
+          <li>• HTML5</li>
+          <li>• CSS</li>
+          <li>• JavaScript</li>
         </ul>
       </div>
     </div>
@@ -975,7 +967,19 @@
     aria-labelledby="modal-title"
     class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
   >
-    <div class="bg-cyber-surface border-2 border-cyber-cyan/60 rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 relative">
+    <div class="presentation-shell bg-cyber-surface border-2 border-cyber-cyan/60 rounded-3xl max-w-6xl w-full p-5 sm:p-8 shadow-2xl relative flex flex-col">
+      <div class="flex items-center justify-between gap-4 border-b border-white/10 pb-4"><div><span class="font-monoCyber text-xs text-cyber-cyan uppercase tracking-wider">Roteiro de Defesa • Equipe de Desenvolvimento</span><h2 id="modal-title" class="font-sansCyber text-2xl sm:text-3xl font-bold text-white mt-1">Apresentacao: Cinema ao Bolso</h2></div><button id="presentation-close" type="button" aria-label="Fechar apresentacao" class="p-2 rounded-xl bg-white/10 hover:bg-cyber-magenta text-slate-300"><span class="text-2xl">×</span></button></div>
+      <div class="flex-1 py-6 sm:py-10" aria-live="polite">
+        <article class="presentation-slide is-active"><span class="slide-kicker text-cinema-gold">01 / Abertura</span><h3 class="slide-title font-serifCinema">Da Sala de Cinema ao Bolso</h3><p class="slide-lead">Como saimos das narrativas coletivas da cultura de massa para as bolhas personalizadas dos algoritmos.</p><div class="slide-highlight border-cinema-gold/50 bg-cinema-cream/10"><strong>EM13CHS603</strong><span>Impactos das tecnologias digitais na sociedade, na politica e na atencao.</span></div></article>
+        <article class="presentation-slide"><span class="slide-kicker text-cinema-gold">02 / Ciencias Humanas</span><h3 class="slide-title font-serifCinema">Da experiencia coletiva a subjetividade fragmentada</h3><div class="slide-columns"><div><h4 class="text-cinema-gold">Seculo XX</h4><p>Cinema e TV criavam narrativas centralizadas e um espaco publico compartilhado.</p></div><div><h4 class="text-cyber-cyan">Seculo XXI</h4><p>Smartphones e feeds personalizados transformam cada pessoa em uma audiencia diferente.</p></div></div></article>
+        <article class="presentation-slide"><span class="slide-kicker text-cyber-magenta">03 / Politica</span><h3 class="slide-title">Politica, bolhas e antipolitica</h3><p class="slide-lead">Algoritmos priorizam conteudos que geram reacao. A indignacao viral cresce, enquanto o debate institucional perde espaco.</p><div class="slide-highlight border-cyber-magenta/50 bg-cyber-magenta/10"><strong>Ideia central</strong><span>Quando grupos consomem versoes incompativeis da realidade, o pacto democratico entra em crise.</span></div></article>
+        <article class="presentation-slide"><span class="slide-kicker text-cyber-cyan">04 / Demonstracao</span><h3 class="slide-title">O laboratorio da dopamina</h3><p class="slide-lead">Rolagem infinita, notificacoes e validacao social transformam atencao em metrica e criam um ciclo de recompensa variavel.</p><div class="slide-columns"><div><h4 class="text-cyber-cyan">Mostrar no site</h4><p>Acionar os botoes do laboratorio e observar a barra de intensidade.</p></div><div><h4 class="text-cinema-gold">Nossa leitura</h4><p>Autonomia digital comeca quando reconhecemos os gatilhos e recuperamos o foco.</p></div></div></article>
+        <article class="presentation-slide"><span class="slide-kicker text-cinema-gold">05 / Dados historicos</span><h3 class="slide-title font-serifCinema">A virada da primeira tela</h3><p class="slide-lead">Os graficos mostram a queda do consumo coletivo e a ascensao do uso individualizado depois da popularizacao dos smartphones.</p><div class="slide-stat-grid"><span><strong>1980</strong>TV e cinema dominam</span><span><strong>2010</strong>tela pessoal ultrapassa o coletivo</span><span><strong>2026</strong>feed vertical se consolida</span></div></article>
+        <article class="presentation-slide"><span class="slide-kicker text-cyber-cyan">06 / Encerramento</span><h3 class="slide-title">A pergunta que fica</h3><p class="slide-lead">As telas mudaram de tamanho, mas tambem mudaram nossa forma de conviver, prestar atencao e participar da politica.</p><div class="slide-highlight border-cyber-cyan/50 bg-cyber-cyan/10"><strong>Debate</strong><span>Como usar as tecnologias sem deixar que elas decidam sozinhas o que merece nossa atencao?</span></div></article>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4"><span id="presentation-progress" class="font-monoCyber text-xs text-slate-400">Slide 1 de 6</span><div class="flex gap-2"><button id="presentation-prev" type="button" class="slide-control">← Anterior</button><button id="presentation-next" type="button" class="slide-control slide-control-primary">Proximo →</button></div></div><p class="text-center text-[11px] text-slate-500 font-monoCyber mt-3">Use ← →, PageUp/PageDown ou Esc</p>
+    </div>
+    <div class="presentation-legacy bg-cyber-surface border-2 border-cyber-cyan/60 rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 relative">
       <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
         <div>
           <span class="font-monoCyber text-xs text-cyber-cyan uppercase tracking-wider">Roteiro de Defesa • Equipe de Desenvolvimento</span>
@@ -1071,13 +1075,27 @@
 
       const presentationModal = document.getElementById('presentation-modal');
       const openPresentationBtn = document.getElementById('open-presentation-btn');
-      const closePresentationBtn = document.getElementById('close-presentation-btn');
+      const presentationShell = presentationModal?.querySelector('.presentation-shell');
+      const presentationSlides = presentationShell ? [...presentationShell.querySelectorAll('.presentation-slide')] : [];
+      const presentationProgress = presentationShell?.querySelector('#presentation-progress');
+      const presentationPrev = presentationShell?.querySelector('#presentation-prev');
+      const presentationNext = presentationShell?.querySelector('#presentation-next');
+      let presentationIndex = 0;
+
+      function renderPresentationSlide() {
+        presentationSlides.forEach((slide, index) => slide.classList.toggle('is-active', index === presentationIndex));
+        if (presentationProgress) presentationProgress.textContent = `Slide ${presentationIndex + 1} de ${presentationSlides.length}`;
+        if (presentationPrev) presentationPrev.disabled = presentationIndex === 0;
+        if (presentationNext) presentationNext.textContent = presentationIndex === presentationSlides.length - 1 ? 'Finalizar' : 'Proximo →';
+      }
 
       function toggleModal(show) {
         if (!presentationModal) return;
         if (show) {
+          presentationIndex = 0;
+          renderPresentationSlide();
           presentationModal.classList.remove('hidden');
-          closePresentationBtn?.focus();
+          presentationShell?.querySelector('#presentation-close')?.focus();
         } else {
           presentationModal.classList.add('hidden');
           openPresentationBtn?.focus();
@@ -1085,15 +1103,26 @@
       }
 
       openPresentationBtn?.addEventListener('click', () => toggleModal(true));
-      closePresentationBtn?.addEventListener('click', () => toggleModal(false));
+      presentationShell?.querySelector('#presentation-close')?.addEventListener('click', () => toggleModal(false));
+      presentationPrev?.addEventListener('click', () => { presentationIndex = Math.max(0, presentationIndex - 1); renderPresentationSlide(); });
+      presentationNext?.addEventListener('click', () => { if (presentationIndex === presentationSlides.length - 1) toggleModal(false); else { presentationIndex += 1; renderPresentationSlide(); } });
       presentationModal?.addEventListener('click', (e) => {
         if (e.target === presentationModal) toggleModal(false);
       });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !presentationModal.classList.contains('hidden')) {
+        if (!presentationModal || presentationModal.classList.contains('hidden')) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault();
+          if (presentationIndex === presentationSlides.length - 1) toggleModal(false); else { presentationIndex += 1; renderPresentationSlide(); }
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          presentationIndex = Math.max(0, presentationIndex - 1);
+          renderPresentationSlide();
+        } else if (e.key === 'Escape') {
           toggleModal(false);
         }
       });
+      renderPresentationSlide();
 
       // -------------------------------------------------------------------
       // 2. HERO SPLIT-SCREEN INTERATIVO
@@ -1213,13 +1242,10 @@
       const compCinemaTitle = document.getElementById('comp-cinema-title');
       const compCinemaDesc = document.getElementById('comp-cinema-desc');
       const compCinemaBullets = document.getElementById('comp-cinema-bullets');
-      const compCinemaConcept = document.getElementById('comp-cinema-concept');
       const compCyberEra = document.getElementById('comp-cyber-era');
       const compCyberTitle = document.getElementById('comp-cyber-title');
       const compCyberDesc = document.getElementById('comp-cyber-desc');
       const compCyberBullets = document.getElementById('comp-cyber-bullets');
-      const compCyberConcept = document.getElementById('comp-cyber-concept');
-      const compSynthesisText = document.getElementById('comp-synthesis-text');
 
       axisTabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -1239,7 +1265,6 @@
           compCinemaEra.textContent = data.cinemaEra;
           compCinemaTitle.textContent = data.cinemaTitle;
           compCinemaDesc.textContent = data.cinemaDesc;
-          compCinemaConcept.textContent = data.cinemaConcept;
           compCinemaBullets.innerHTML = data.cinemaBullets.map(item => `
             <li class="flex items-start gap-2.5">
               <span class="text-cinema-red font-bold">✦</span>
@@ -1250,7 +1275,6 @@
           compCyberEra.textContent = data.cyberEra;
           compCyberTitle.textContent = data.cyberTitle;
           compCyberDesc.textContent = data.cyberDesc;
-          compCyberConcept.textContent = data.cyberConcept;
           compCyberBullets.innerHTML = data.cyberBullets.map(item => `
             <li class="flex items-start gap-2.5">
               <span class="text-cyber-cyan font-monoCyber font-bold">&gt;</span>
@@ -1258,7 +1282,6 @@
             </li>
           `).join('');
 
-          compSynthesisText.textContent = data.synthesis;
         });
       });
 
@@ -1451,9 +1474,26 @@
             { year: '2010', a: 3.5, b: 2.3, headline: 'Popularização dos Smartphones e 3G', analysis: 'Com a chegada dos smartphones e das primeiras redes sociais móveis, a tela sai da mesa e acompanha o usuário no transporte, na escola e no trabalho.' },
             { year: '2018', a: 2.7, b: 4.4, headline: 'Virada dos Feeds Algorítmicos e Vídeos Curtos', analysis: 'Pela primeira vez, o tempo gasto em pequenas telas supera amplamente a TV tradicional. O algoritmo passa a ditar o consumo audiovisual.' },
             { year: '2026', a: 2.1, b: 5.4, headline: 'Hegemonia do Feed Vertical e IA Generativa', analysis: 'O smartphone consolida-se como primeira tela. Mesmo quando a TV está ligada na sala, o olhar divide-se com vídeos curtos e notificações personalizadas.' }
+          ],
+          title: 'Acesso à Internet por equipamento (%)',
+          unit: '%',
+          maxVal: 100,
+          labelA: 'Televisão',
+          labelB: 'Telefone celular',
+          sourceNote: 'Fonte: IBGE, PNAD Contínua TIC 2016–2024. Percentuais independentes: a mesma pessoa pode usar mais de um equipamento, portanto os valores não somam 100%.',
+          points: [
+            { year: '2016', a: 11.3, b: 94.7, headline: 'Início da série oficial do IBGE', analysis: 'Em 2016, 11,3% das pessoas usaram a televisão para acessar a Internet, contra 94,7% pelo telefone celular.' },
+            { year: '2017', a: 16.4, b: 97.1, headline: 'Celular já é o principal equipamento', analysis: 'O telefone celular amplia sua presença, enquanto a televisão ainda aparece como meio secundário de acesso.' },
+            { year: '2018', a: 23.3, b: 98.2, headline: 'Crescimento do acesso pela televisão', analysis: 'O acesso pela televisão cresce, mas o celular permanece amplamente dominante.' },
+            { year: '2019', a: 32.2, b: 98.6, headline: 'TV conectada ganha espaço', analysis: 'A televisão passa a ser usada por 32,2% dos usuários de Internet; o celular chega a 98,6%.' },
+            { year: '2021', a: 45.1, b: 98.8, headline: 'Acesso multiplataforma', analysis: 'A televisão conectada se aproxima da metade dos usuários, enquanto o celular permanece praticamente universal.' },
+            { year: '2022', a: 47.4, b: 98.9, headline: 'Predomínio do celular', analysis: 'O celular alcança 98,9% e a televisão chega a 47,4% como equipamento de acesso.' },
+            { year: '2023', a: 49.7, b: 98.8, headline: 'TV perto da metade dos usuários', analysis: 'Em 2023, 49,7% acessaram a Internet pela televisão e 98,8% pelo celular.' },
+            { year: '2024', a: 53.5, b: 98.8, headline: 'Televisão supera metade da série', analysis: 'Em 2024, a televisão alcança 53,5%, enquanto o celular continua em 98,8%, segundo a PNAD Contínua.' }
           ]
         },
         collective: {
+          sourceNote: 'Referências: IBGE PNAD Contínua e Cetic.br TIC Domicílios. Os percentuais de consumo coletivo vs. individual deste painel são estimativas didáticas, pois não há uma série oficial única com essa divisão para todas as décadas.',
           title: 'Consumo Audiovisual Coletivo vs. Individualizado (%)',
           unit: '%',
           maxVal: 100,
@@ -1471,26 +1511,27 @@
           ]
         },
         bubbles: {
-          title: 'Índice de Fragmentação da Atenção e Bolhas Informativas (0–100)',
+          sourceNote: 'Referências: Reuters Institute Digital News Report 2024 e Pew Research Center 2024. O índice 0–100 deste painel é uma escala didática, não um indicador oficial publicado por essas instituições.',
+          title: 'Coesão vs. Fragmentação da Esfera Pública (0–100)',
           unit: ' pts',
           maxVal: 100,
           labelA: 'Coesão da Esfera Pública',
-          labelB: 'Índice de Bolhas & Polarização',
+          labelB: 'Fragmentação da Esfera Pública',
           colorA: '#d4af37',
           colorB: '#8a2be2',
           points: [
-            { year: '1980', a: 85, b: 12, headline: 'Esfera Pública Centralizada', analysis: 'Baixa fragmentação: a sociedade compartilhava os mesmos telejornais e fatos básicos, ainda que sob forte controle editorial.' },
-            { year: '1990', a: 80, b: 18, headline: 'Segmentação por Canais Temáticos', analysis: 'Canais especializados de notícias e esportes segmentam públicos, mas mantêm padrões jornalísticos compartilhados.' },
+            { year: '1980', a: 85, b: 15, headline: 'Esfera Pública Centralizada', analysis: 'Baixa fragmentação: a sociedade compartilhava os mesmos telejornais e fatos básicos, ainda que sob forte controle editorial.' },
+            { year: '1990', a: 80, b: 20, headline: 'Segmentação por Canais Temáticos', analysis: 'Canais especializados de notícias e esportes segmentam públicos, mas mantêm padrões jornalísticos compartilhados.' },
             { year: '2000', a: 72, b: 28, headline: 'Web 1.0 e Primeiras Comunidades', analysis: 'A internet amplia o acesso a fontes alternativas, ainda dependente de busca ativa por parte do usuário.' },
-            { year: '2010', a: 55, b: 49, headline: 'Nascimento dos Feeds Ordenados por Algoritmo', analysis: 'As redes abandonam a ordem cronológica e passam a filtrar o que gera mais curtidas, iniciando o efeito "bolha de filtro".' },
-            { year: '2018', a: 32, b: 78, headline: 'Explosão das Câmaras de Eco e Antipolítica', analysis: 'A viralização de cortes emocionais e desinformação intensifica a polarização política e a desconfiança nas instituições.' },
-            { year: '2026', a: 24, b: 88, headline: 'Realidades Paralelas Hiperpersonalizadas', analysis: 'Com curadoria automatizada de alta precisão, grupos distintos habitam ecossistemas informativos quase incomunicáveis entre si.' }
+            { year: '2010', a: 55, b: 45, headline: 'Nascimento dos Feeds Ordenados por Algoritmo', analysis: 'As redes abandonam a ordem cronológica e passam a filtrar o que gera mais curtidas, iniciando o efeito "bolha de filtro".' },
+            { year: '2018', a: 32, b: 68, headline: 'Explosão das Câmaras de Eco e Antipolítica', analysis: 'A viralização de cortes emocionais e desinformação intensifica a polarização política e a desconfiança nas instituições.' },
+            { year: '2026', a: 24, b: 76, headline: 'Realidades Paralelas Hiperpersonalizadas', analysis: 'Com curadoria automatizada de alta precisão, grupos distintos habitam ecossistemas informativos quase incomunicáveis entre si.' }
           ]
         }
       };
 
       let currentMetricKey = 'exposure';
-      let selectedYearIdx = 5; // 2026 por padrão
+      let selectedYearIdx = 7; // 2024 por padrão no indicador oficial do IBGE
 
       const svgEl = document.getElementById('evolution-svg');
       const chartTitleEl = document.getElementById('chart-title');
@@ -1500,6 +1541,9 @@
       const detailValAEl = document.getElementById('detail-val-a');
       const detailValBEl = document.getElementById('detail-val-b');
       const detailAnalysisEl = document.getElementById('detail-analysis');
+      const chartSourceNoteEl = document.getElementById('chart-source-note');
+      const detailLabelAEl = document.getElementById('detail-label-a');
+      const detailLabelBEl = document.getElementById('detail-label-b');
 
       function updateChartDetailPanel(dataset, idx) {
         const pt = dataset.points[idx];
@@ -1511,6 +1555,9 @@
         detailValBEl.textContent = `${pt.b}${dataset.unit}`;
         detailValBEl.style.color = dataset.colorB;
         detailAnalysisEl.textContent = pt.analysis;
+        if (detailLabelAEl) detailLabelAEl.textContent = dataset.labelA;
+        if (detailLabelBEl) detailLabelBEl.textContent = dataset.labelB;
+        if (chartSourceNoteEl) chartSourceNoteEl.textContent = dataset.sourceNote || 'Fonte: indicador selecionado.';
       }
 
       function renderEvolutionChart() {
@@ -1609,6 +1656,7 @@
       document.querySelectorAll('.chart-metric-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           currentMetricKey = btn.getAttribute('data-metric');
+          selectedYearIdx = Math.min(selectedYearIdx, historicalDatasets[currentMetricKey].points.length - 1);
           document.querySelectorAll('.chart-metric-btn').forEach(b => {
             b.setAttribute('aria-selected', 'false');
             b.className = 'chart-metric-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-monoCyber font-semibold bg-cyber-bg text-slate-300 border border-white/15 hover:border-white/40';
